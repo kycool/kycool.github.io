@@ -26,8 +26,8 @@ url: https://kycool.cn/
 permalink: posts/:abbrlink/
 permalink_defaults:
 pretty_urls:
-    trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
-    trailing_html: true # Set to false to remove trailing '.html' from permalinks
+  trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
+  trailing_html: true # Set to false to remove trailing '.html' from permalinks
 
 # Directory
 source_dir: source
@@ -45,9 +45,9 @@ default_layout: post
 titlecase: false # Transform title into titlecase
 
 external_link:
-    enable: true # Open external links in new tab
-    field: site # Apply to the whole site
-    exclude: ""
+  enable: true # Open external links in new tab
+  field: site # Apply to the whole site
+  exclude: ""
 
 filename_case: 0
 render_drafts: false
@@ -56,31 +56,31 @@ future: true
 
 post_asset_folder: true
 marked:
-    prependRoot: true
-    postAsset: true
+  prependRoot: true
+  postAsset: true
 
 highlight:
-    enable: true
-    line_number: true
-    auto_detect: true
-    tab_replace: ""
-    wrap: true
-    hljs: true
+  enable: true
+  line_number: true
+  auto_detect: true
+  tab_replace: ""
+  wrap: true
+  hljs: true
 
 prismjs:
-    enable: false
-    preprocess: true
-    line_number: true
-    tab_replace: ""
+  enable: false
+  preprocess: true
+  line_number: true
+  tab_replace: ""
 
 # Home page setting
 # path: Root path for your blogs index page. (default = '')
 # per_page: Posts displayed per page. (0 = disable pagination)
 # order_by: Posts order. (Order by date descending by default)
 index_generator:
-    path: ""
-    per_page: 10
-    order_by: -date
+  path: ""
+  per_page: 10
+  order_by: -date
 
 # Category & Tag
 default_category: uncategorized
@@ -119,43 +119,43 @@ theme: next
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-    type: "git"
-    repo:
-        github: "git@github.com:kycool/kycool.github.io.git"
-    branch: "gh-pages"
+  type: "git"
+  repo:
+    github: "git@github.com:kycool/kycool.github.io.git"
+  branch: "gh-pages"
 
 search:
-    path: search.xml
-    field: post
-    content: true
-    format: html
+  path: search.xml
+  field: post
+  content: true
+  format: html
 
 nofollow:
-    enable: true
-    field: site
-    exclude:
-        - "kycool.cn"
-        - "www.kycool.cn"
+  enable: true
+  field: site
+  exclude:
+    - "kycool.cn"
+    - "www.kycool.cn"
 
 # 博文压缩
 neat_enable: true
 # 压缩 html
 neat_html:
-    enable: true
-    exclude:
+  enable: true
+  exclude:
 # 压缩 css
 neat_css:
-    enable: true
-    exclude:
-        - "**/*.min.css"
+  enable: true
+  exclude:
+    - "**/*.min.css"
 # 压缩 js
 neat_js:
-    enable: true
-    mangle: true
-    output:
-    compress:
-    exclude:
-        - "**/*.min.js"
-        - "**/jquery.fancybox.pack.js"
-        - "**/index.js"
-        - "**/fireworks.js"
+  enable: true
+  mangle: true
+  output:
+  compress:
+  exclude:
+    - "**/*.min.js"
+    - "**/jquery.fancybox.pack.js"
+    - "**/index.js"
+    - "**/fireworks.js"
