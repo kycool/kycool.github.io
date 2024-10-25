@@ -53,8 +53,6 @@ jobs:
         run: |
           npm i -g hexo-cli
           npm ci
-          git clone https://github.com/next-theme/hexo-theme-next themes/next
-          cd themes/next/
 
       - name: Deploy hexo
         run: |
