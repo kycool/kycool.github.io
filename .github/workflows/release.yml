@@ -47,7 +47,6 @@ jobs:
           npm ci
           git clone https://github.com/next-theme/hexo-theme-next themes/next
           cd themes/next/
-          npm ci
 
       - name: Deploy hexo
         run: |
