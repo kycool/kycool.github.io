@@ -31,7 +31,7 @@ jobs:
 
       - name: Configuration environment
         env:
-          HEXO_DEPLOY_PRI: ${{secrets.HEXO_DEPLOY_PRI}}
+          HEXO_DEPLOY_PRI: ${{ secrets.HEXO_DEPLOY_PRI }}
         run: |
           sudo timedatectl set-timezone "Asia/Shanghai"
           mkdir -p ~/.ssh/
@@ -44,10 +44,10 @@ jobs:
           git config --global user.name "kycool"
           git config --global user.email "kycool@gmail.com"
 
-      - name: Test SSH Connection
-        run: |
-          cat ~/.ssh/id_rsa
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no git@github.com || exit 1
+      # - name: Test SSH Connection
+      #   run: |
+      #     cat ~/.ssh/id_rsa
+      #     ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no git@github.com || exit 1
 
       - name: Install dependencies
         run: |
