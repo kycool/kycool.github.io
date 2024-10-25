@@ -45,7 +45,9 @@ jobs:
           git config --global user.email "kycool@gmail.com"
 
       - name: Test SSH Connection
-        run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no git@github.com || exit 1
+        run: |
+          cat ~/.ssh/id_rsa
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no git@github.com || exit 1
 
       - name: Install dependencies
         run: |
