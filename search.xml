@@ -55,6 +55,37 @@
       </tags>
   </entry>
   <entry>
+    <title>本地开发使用 https</title>
+    <url>/posts/32953/</url>
+    <content><![CDATA[<p>这阵子本地开发测试，需要本地可以使用 HTTPS 证书，找到了 <code>mkcert</code> 这个傻瓜式的工具（<a href="https://github.com/FiloSottile/mkcert">https://github.com/FiloSottile/mkcert</a>),</p>
+<p>mkcert 设计很简单，优雅，隐藏了几乎所有生成 TLS 证书所必须的知识，它适用于任何域名，主机名，IP，包括 localhost，但是切记，只能在本地使用。<span id="more"></span></p>
+<p>证书是由你自己的私有 CA 签发，当你运行 <code>mkcert-install</code> 会自动配置这些信任，因此，当浏览器访问时，就会显示安全标识。</p>
+<p>与 OpenSSL 不同的是，不需要为每个证书配置很多选项。mkcert 最主要的功能是作为开发者工具，聚焦于让本地环境配置 TLS 证书变得简单高效。</p>
+<h3 id="1-安装"><a href="#1-安装" class="headerlink" title="1 安装"></a>1 安装</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brew install mkcert</span><br><span class="line">brew install nss # if you use Firefox</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-使用"><a href="#2-使用" class="headerlink" title="2 使用"></a>2 使用</h3><p>您需要首先在系统信任库中安装本地 CA.</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mkcert -install</span></span><br><span class="line"></span><br><span class="line">Using the local CA at &quot;/Users/kycool/Library/Application Support/mkcert&quot; ✨</span><br><span class="line">The local CA is already installed in the system trust store! 👍</span><br></pre></td></tr></table></figure>
+
+<p>完成后，可以给自己的本地域名生成证书了，生成证书很简单</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> mkcert kycooltest.cn <span class="string">&#x27;*.kycooltest.cn&#x27;</span> localhost 127.0.0.1 ::1</span></span><br><span class="line">Using the local CA at &quot;/Users/kycool/Library/Application Support/mkcert&quot; ✨</span><br><span class="line"></span><br><span class="line">Created a new certificate valid for the following names 📜</span><br><span class="line"> - &quot;kycooltest.cn&quot;</span><br><span class="line"> - &quot;*.kycooltest.cn&quot;</span><br><span class="line"> - &quot;localhost&quot;</span><br><span class="line"> - &quot;127.0.0.1&quot;</span><br><span class="line"> - &quot;::1&quot;</span><br><span class="line"></span><br><span class="line">Reminder: X.509 wildcards only go one level deep, so this won&#x27;t match a.b.kycooltest.cn ℹ️</span><br><span class="line"></span><br><span class="line">The certificate is at &quot;./kycooltest.cn+4.pem&quot; and the key at &quot;./kycooltest.cn+4-key.pem&quot; ✅</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-验证"><a href="#3-验证" class="headerlink" title="3 验证"></a>3 验证</h3><p>添加本地 <code>hosts</code> 记录</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> kycooltest.cn</span><br></pre></td></tr></table></figure>
+
+<p>添加 nginx 配置文件</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen *:<span class="number">443</span> ssl;</span><br><span class="line">    server_name  kycooltest.cn;</span><br><span class="line"></span><br><span class="line">    root /var/www;</span><br><span class="line"></span><br><span class="line">    ssl_certificate /Users/kycool/Documents/caddy/kycooltest.cn+<span class="number">4.</span>pem;</span><br><span class="line">    ssl_certificate_key /Users/kycool/Documents/caddy/kycooltest.cn+<span class="number">4</span>-key.pem;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接着在 浏览器中打开 <code>https://kycooltest.cn</code></p>
+<p><img src="/posts/32953/mkcert.png" alt="mkcert.png"></p>
+]]></content>
+      <categories>
+        <category>开发工具</category>
+      </categories>
+      <tags>
+        <tag>https</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>资源加速系列之 Github</title>
     <url>/posts/19128/</url>
     <content><![CDATA[<h3 id="1-故事发生背景"><a href="#1-故事发生背景" class="headerlink" title="1 故事发生背景"></a>1 故事发生背景</h3><p>这段时间，github 的 clone 快搞死人了，速度慢的一逼，上网看了几种方法<span id="more"></span></p>
@@ -106,37 +137,6 @@
       </tags>
   </entry>
   <entry>
-    <title>本地开发使用 https</title>
-    <url>/posts/32953/</url>
-    <content><![CDATA[<p>这阵子本地开发测试，需要本地可以使用 HTTPS 证书，找到了 <code>mkcert</code> 这个傻瓜式的工具（<a href="https://github.com/FiloSottile/mkcert">https://github.com/FiloSottile/mkcert</a>),</p>
-<p>mkcert 设计很简单，优雅，隐藏了几乎所有生成 TLS 证书所必须的知识，它适用于任何域名，主机名，IP，包括 localhost，但是切记，只能在本地使用。<span id="more"></span></p>
-<p>证书是由你自己的私有 CA 签发，当你运行 <code>mkcert-install</code> 会自动配置这些信任，因此，当浏览器访问时，就会显示安全标识。</p>
-<p>与 OpenSSL 不同的是，不需要为每个证书配置很多选项。mkcert 最主要的功能是作为开发者工具，聚焦于让本地环境配置 TLS 证书变得简单高效。</p>
-<h3 id="1-安装"><a href="#1-安装" class="headerlink" title="1 安装"></a>1 安装</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brew install mkcert</span><br><span class="line">brew install nss # if you use Firefox</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-使用"><a href="#2-使用" class="headerlink" title="2 使用"></a>2 使用</h3><p>您需要首先在系统信任库中安装本地 CA.</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mkcert -install</span></span><br><span class="line"></span><br><span class="line">Using the local CA at &quot;/Users/kycool/Library/Application Support/mkcert&quot; ✨</span><br><span class="line">The local CA is already installed in the system trust store! 👍</span><br></pre></td></tr></table></figure>
-
-<p>完成后，可以给自己的本地域名生成证书了，生成证书很简单</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> mkcert kycooltest.cn <span class="string">&#x27;*.kycooltest.cn&#x27;</span> localhost 127.0.0.1 ::1</span></span><br><span class="line">Using the local CA at &quot;/Users/kycool/Library/Application Support/mkcert&quot; ✨</span><br><span class="line"></span><br><span class="line">Created a new certificate valid for the following names 📜</span><br><span class="line"> - &quot;kycooltest.cn&quot;</span><br><span class="line"> - &quot;*.kycooltest.cn&quot;</span><br><span class="line"> - &quot;localhost&quot;</span><br><span class="line"> - &quot;127.0.0.1&quot;</span><br><span class="line"> - &quot;::1&quot;</span><br><span class="line"></span><br><span class="line">Reminder: X.509 wildcards only go one level deep, so this won&#x27;t match a.b.kycooltest.cn ℹ️</span><br><span class="line"></span><br><span class="line">The certificate is at &quot;./kycooltest.cn+4.pem&quot; and the key at &quot;./kycooltest.cn+4-key.pem&quot; ✅</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-验证"><a href="#3-验证" class="headerlink" title="3 验证"></a>3 验证</h3><p>添加本地 <code>hosts</code> 记录</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> kycooltest.cn</span><br></pre></td></tr></table></figure>
-
-<p>添加 nginx 配置文件</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen *:<span class="number">443</span> ssl;</span><br><span class="line">    server_name  kycooltest.cn;</span><br><span class="line"></span><br><span class="line">    root /var/www;</span><br><span class="line"></span><br><span class="line">    ssl_certificate /Users/kycool/Documents/caddy/kycooltest.cn+<span class="number">4.</span>pem;</span><br><span class="line">    ssl_certificate_key /Users/kycool/Documents/caddy/kycooltest.cn+<span class="number">4</span>-key.pem;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>接着在 浏览器中打开 <code>https://kycooltest.cn</code></p>
-<p><img src="/posts/32953/mkcert.png" alt="mkcert.png"></p>
-]]></content>
-      <categories>
-        <category>开发工具</category>
-      </categories>
-      <tags>
-        <tag>https</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Antd：Form 的 InitialValues 重置</title>
     <url>/posts/59046/</url>
     <content><![CDATA[<p>描述：编辑页面中 <code>Form</code> 的 <code>InitialValues</code> 的重置</p>
@@ -174,67 +174,6 @@
       <tags>
         <tag>redux</tag>
         <tag>Antd</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>前端 | 重构 gulpfile.js</title>
-    <url>/posts/18305/</url>
-    <content><![CDATA[<p>迭代持续重构 gulpfile.js<span id="more"></span></p>
-<h3 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h3><p>前端任务打包工具选用的是 <code>gulp</code>, 当时选用 <code>gulp</code> 也是偶然，在使用 <code>grunt</code> 初期，翻阅 <code>dailyjs.com</code> 时发现一片文章着重介绍了 <code>gulp</code>, 甚至还预言是 <code>grunt</code> 的劲敌，好奇心驱使，确实发现，<code>gulp</code> 的流的概念更人性化，看着当时写的 <code>grunt</code> 配置文件，不忍直视 <!--more--></p>
-<p>由于项目的不断迭代，前端的任务也在不断的迭代，任务越来越多，没有优化前，全部的任务都在一个单独的 <code>gulpfile.js</code> 中，后来随着时间的推移，发现修改一个任务时，查询好麻烦，五百行左右的代码让人烦躁，代码结构和 <a href="https://github.com/gulpjs/gulp/blob/master/docs/recipes/using-multiple-sources-in-one-task.md">https://github.com/gulpjs/gulp/blob/master/docs/recipes/using-multiple-sources-in-one-task.md</a> 如出一辙</p>
-<p>重构 <code>gulpfile.js</code> 必须要进行</p>
-<h3 id="2-重构迭代-1-拆分任务"><a href="#2-重构迭代-1-拆分任务" class="headerlink" title="2 重构迭代 1: 拆分任务"></a>2 重构迭代 1: 拆分任务</h3><p>最先是按照 <a href="https://github.com/gulpjs/gulp/blob/master/docs/recipes/split-tasks-across-multiple-files.md">https://github.com/gulpjs/gulp/blob/master/docs/recipes/split-tasks-across-multiple-files.md</a> 此文档中的架构进行迭代的</p>
-<h4 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">gulpfile.<span class="property">js</span></span><br><span class="line">tasks/</span><br><span class="line">├── xxxx.<span class="property">js</span></span><br><span class="line">├── xxxx.<span class="property">js</span></span><br><span class="line">└── image.<span class="property">js</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="image-js"><a href="#image-js" class="headerlink" title="image.js"></a>image.js</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> imagemin = <span class="built_in">require</span>(<span class="string">&quot;gulp-imagemin&quot;</span>);</span><br><span class="line"></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&quot;img&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> gulp</span><br><span class="line">    .<span class="title function_">src</span>(<span class="string">&quot;./images/**/*.*&quot;</span>)</span><br><span class="line">    .<span class="title function_">pipe</span>(</span><br><span class="line">      <span class="title function_">imagemin</span>(&#123;</span><br><span class="line">        <span class="attr">optimizationLevel</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="attr">progressive</span>: <span class="literal">true</span>,</span><br><span class="line">      &#125;)</span><br><span class="line">    )</span><br><span class="line">    .<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&quot;./imagemini&quot;</span>));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<h4 id="gulpfile-js"><a href="#gulpfile-js" class="headerlink" title="gulpfile.js"></a>gulpfile.js</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> requireDir = <span class="built_in">require</span>(<span class="string">&quot;require-dir&quot;</span>),</span><br><span class="line">  tasks = <span class="title function_">requireDir</span>(<span class="string">&quot;./tasks&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<p>这种文件架构让任务按照类型分成子任务放在单独的文件中，顿时感觉干净了很多，这时可以自由的添加子任务，而不用管 <code>gulpfile.js</code>, 此时子任务好比插件，需要就添加，没用就删除，相当方便</p>
-<h3 id="3-重构迭代-2-避免模块和插件重复依赖"><a href="#3-重构迭代-2-避免模块和插件重复依赖" class="headerlink" title="3 重构迭代 2: 避免模块和插件重复依赖"></a>3 重构迭代 2: 避免模块和插件重复依赖</h3><p>随着时间的推移，发现这种组织架构还是有些不方便，不方便在哪里呢，每一个任务文件中，我都要写 <code>var xxx = require(&#39;xxx&#39;)</code>, 如果你是用上面的架构，任务多的时候，估计也会抓狂，因为你会发现 <code>插件和模块依赖被重复的引入进来</code>，这样就提高了成本</p>
-<p>我不想在子任务文件中重复的引入 <code>插件或模块依赖</code>，有没有上面好方法，<code>stackoverflow</code> 是个好老师，老师告知：</p>
-<ul>
-<li>使用 <code>gulp-load-plugins</code> 插件<br>地址：<a href="https://www.npmjs.com/package/gulp-load-plugins">https://www.npmjs.com/package/gulp-load-plugins</a></li>
-<li>把子任务封装成模块</li>
-</ul>
-<h4 id="代码结构"><a href="#代码结构" class="headerlink" title="代码结构"></a>代码结构</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">gulpfile.<span class="property">js</span></span><br><span class="line">tasks/</span><br><span class="line">├── xxxx.<span class="property">js</span></span><br><span class="line">├── xxxx.<span class="property">js</span></span><br><span class="line">└── image.<span class="property">js</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="gulpfile-js-1"><a href="#gulpfile-js-1" class="headerlink" title="gulpfile.js"></a>gulpfile.js</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">&quot;gulp&quot;</span>),</span><br><span class="line">  gulpLoadPlugins = <span class="built_in">require</span>(<span class="string">&quot;gulp-load-plugins&quot;</span>);</span><br><span class="line"><span class="comment">// 这里请查看文档</span></span><br><span class="line">gulpLoadPlugins.<span class="property">imagemin</span> = <span class="built_in">require</span>(<span class="string">&quot;gulp-imagemin&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">require</span>(<span class="string">&quot;./tasks/image&quot;</span>)(gulp, gulpLoadPlugins);</span><br></pre></td></tr></table></figure>
-
-<h4 id="image-js-1"><a href="#image-js-1" class="headerlink" title="image.js"></a>image.js</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="keyword">function</span> (<span class="params">gulp, Plugin</span>) &#123;</span><br><span class="line">  gulp.<span class="title function_">task</span>(<span class="string">&quot;img&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> gulp</span><br><span class="line">      .<span class="title function_">src</span>(<span class="string">&quot;./images/**/*.*&quot;</span>)</span><br><span class="line">      .<span class="title function_">pipe</span>(</span><br><span class="line">        <span class="title class_">Plugin</span>.<span class="title function_">imagemin</span>(&#123;</span><br><span class="line">          <span class="attr">optimizationLevel</span>: <span class="number">2</span>,</span><br><span class="line">          <span class="attr">progressive</span>: <span class="literal">true</span>,</span><br><span class="line">        &#125;)</span><br><span class="line">      )</span><br><span class="line">      .<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&quot;./imagemini&quot;</span>));</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>运行任务 一切正常，此时一个文件测试已经 ok</p>
-<p>但是 <code>./tasks</code> 下面是有很多的子任务，所以需要一个迭代加载，修改 <code>gulpfile.js</code> 如下</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">&quot;gulp&quot;</span>),</span><br><span class="line">  gulpLoadPlugins = <span class="built_in">require</span>(<span class="string">&quot;gulp-load-plugins&quot;</span>),</span><br><span class="line">  <span class="comment">// 这里获取子任务文件列表 使用了 fs 模块</span></span><br><span class="line">  gulpTaskList = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>).<span class="title function_">readdirSync</span>(<span class="string">&quot;./tasks/&quot;</span>);</span><br><span class="line"><span class="comment">// 这里请查看文档</span></span><br><span class="line">gulpLoadPlugins.<span class="property">imagemin</span> = <span class="built_in">require</span>(<span class="string">&quot;gulp-imagemin&quot;</span>);</span><br><span class="line"></span><br><span class="line">gulpTaskList.<span class="title function_">forEach</span>(<span class="keyword">function</span> (<span class="params">taskfile</span>) &#123;</span><br><span class="line">  <span class="built_in">require</span>(<span class="string">&quot;./tasks/&quot;</span> + taskfile)(gulp, gulpLoadPlugins);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>这一次迭代避免了<code>重复依赖</code>的问题，但是你会发现，所有的依赖都声明在 <code>gulpTaskList</code> 命名空间下，如果你依赖很多插件或模块，<code>gulpfile.js</code> 也是相当长，鱼和熊掌不可兼得，在现在情况下，只能寻找最佳的解决方案</p>
-<h3 id="4-重构迭代-3-参数配置全局化"><a href="#4-重构迭代-3-参数配置全局化" class="headerlink" title="4 重构迭代 3: 参数配置全局化"></a>4 重构迭代 3: 参数配置全局化</h3><p>其实第二部迭代之后，就可以满足大部分需求，但还是有小伙伴抱怨，有些子任务有相同的参数，能不能抽取出来，放到一个单独的文件中，so 继续翻阅文档</p>
-<p>参考文档<a href="https://github.com/gulpjs/gulp/blob/master/docs/recipes/using-external-config-file.md">https://github.com/gulpjs/gulp/blob/master/docs/recipes/using-external-config-file.md</a></p>
-<h4 id="代码结构-1"><a href="#代码结构-1" class="headerlink" title="代码结构"></a>代码结构</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">gulpfile.<span class="property">js</span></span><br><span class="line">gulp</span><br><span class="line">├── config.<span class="property">json</span></span><br><span class="line">├── tasks/</span><br><span class="line">    ├── xxxx.<span class="property">js</span></span><br><span class="line">    ├── xxxx.<span class="property">js</span></span><br><span class="line">    └── image.<span class="property">js</span></span><br></pre></td></tr></table></figure>
-
-<p><code>注意：文件夹层次变了</code></p>
-<h4 id="config-json"><a href="#config-json" class="headerlink" title="config.json"></a>config.json</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;pnglevel&quot;</span>: <span class="number">2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="gulpfile-js-2"><a href="#gulpfile-js-2" class="headerlink" title="gulpfile.js"></a>gulpfile.js</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">&#x27;gulp&#x27;</span>)</span><br><span class="line">  , config = <span class="built_in">require</span>(<span class="string">&#x27;./gulp/config.json&#x27;</span>);</span><br><span class="line">  , gulpLoadPlugins = <span class="built_in">require</span>(<span class="string">&#x27;gulp-load-plugins&#x27;</span>)</span><br><span class="line">  , gulpTaskList = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>).<span class="title function_">readdirSync</span>(<span class="string">&#x27;./gulp/tasks/&#x27;</span>)</span><br><span class="line">  ;</span><br><span class="line"></span><br><span class="line">gulpLoadPlugins.<span class="property">imagemin</span> = <span class="built_in">require</span>(<span class="string">&#x27;gulp-imagemin&#x27;</span>);</span><br><span class="line"></span><br><span class="line">gulpTaskList.<span class="title function_">forEach</span>(<span class="keyword">function</span>(<span class="params">taskfile</span>) &#123;</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">&#x27;./gulp/tasks/&#x27;</span> + taskfile)(gulp, gulpLoadPlugins, config);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<h4 id="image-js-2"><a href="#image-js-2" class="headerlink" title="image.js"></a>image.js</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="keyword">function</span> (<span class="params">gulp, Plugin, config</span>) &#123;</span><br><span class="line">  gulp.<span class="title function_">task</span>(<span class="string">&quot;img&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> gulp</span><br><span class="line">      .<span class="title function_">src</span>(<span class="string">&quot;./images/**/*.*&quot;</span>)</span><br><span class="line">      .<span class="title function_">pipe</span>(</span><br><span class="line">        <span class="title class_">Plugin</span>.<span class="title function_">imagemin</span>(&#123;</span><br><span class="line">          <span class="attr">optimizationLevel</span>: config.<span class="property">pnglevel</span>,</span><br><span class="line">          <span class="attr">progressive</span>: <span class="literal">true</span>,</span><br><span class="line">        &#125;)</span><br><span class="line">      )</span><br><span class="line">      .<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&quot;./imagemini&quot;</span>));</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>此次迭代结束后，我把子任务中通用的配置都写到 <code>./gulp/config.json</code> 中，全局配置</p>
-<h3 id="5-重构迭代-4-参数配置模块化"><a href="#5-重构迭代-4-参数配置模块化" class="headerlink" title="5 重构迭代 4: 参数配置模块化"></a>5 重构迭代 4: 参数配置模块化</h3><p>此次迭代紧跟迭代 3，<code>json</code> 不够完美，不想每次去写 <code>&quot;&quot;</code>, 这里我把配置文件封装成一个模块</p>
-<p>即迭代 3 中的 <code>config.json</code> 变成了 <code>config.js</code></p>
-<h4 id="config-js"><a href="#config-js" class="headerlink" title="config.js"></a>config.js</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> config = &#123;</span><br><span class="line">    <span class="attr">pnglevel</span>: <span class="number">2</span>,</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> config;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h4 id="gulpfile-js-加载"><a href="#gulpfile-js-加载" class="headerlink" title="gulpfile.js 加载"></a>gulpfile.js 加载</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> config = <span class="built_in">require</span>(<span class="string">&quot;./gulp/gulp.config&quot;</span>)();</span><br></pre></td></tr></table></figure>
-
-<p>其他不变，当封装成一个模块的时候，你就发现好处多多了，可以在模块中添加函数，你也可以把配置拆分，根据你的业务需要，自由调整</p>
-<h3 id="6-后记"><a href="#6-后记" class="headerlink" title="6 后记"></a>6 后记</h3><p>通过 4 步的迭代，整个代码组织架构就清晰多了，很感谢这么多热爱开源，乐于助人的朋友，谢谢</p>
-<p>注意：子任务中注意文件夹的层次，子任务中的文件夹是以 <code>gulpfile.js</code> 为基准，因为 <code>gulpfile.js</code> 把子任务都包含进来了</p>
-]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>Gulp</tag>
       </tags>
   </entry>
   <entry>
@@ -307,6 +246,67 @@
       </tags>
   </entry>
   <entry>
+    <title>前端 | 重构 gulpfile.js</title>
+    <url>/posts/18305/</url>
+    <content><![CDATA[<p>迭代持续重构 gulpfile.js<span id="more"></span></p>
+<h3 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h3><p>前端任务打包工具选用的是 <code>gulp</code>, 当时选用 <code>gulp</code> 也是偶然，在使用 <code>grunt</code> 初期，翻阅 <code>dailyjs.com</code> 时发现一片文章着重介绍了 <code>gulp</code>, 甚至还预言是 <code>grunt</code> 的劲敌，好奇心驱使，确实发现，<code>gulp</code> 的流的概念更人性化，看着当时写的 <code>grunt</code> 配置文件，不忍直视 <!--more--></p>
+<p>由于项目的不断迭代，前端的任务也在不断的迭代，任务越来越多，没有优化前，全部的任务都在一个单独的 <code>gulpfile.js</code> 中，后来随着时间的推移，发现修改一个任务时，查询好麻烦，五百行左右的代码让人烦躁，代码结构和 <a href="https://github.com/gulpjs/gulp/blob/master/docs/recipes/using-multiple-sources-in-one-task.md">https://github.com/gulpjs/gulp/blob/master/docs/recipes/using-multiple-sources-in-one-task.md</a> 如出一辙</p>
+<p>重构 <code>gulpfile.js</code> 必须要进行</p>
+<h3 id="2-重构迭代-1-拆分任务"><a href="#2-重构迭代-1-拆分任务" class="headerlink" title="2 重构迭代 1: 拆分任务"></a>2 重构迭代 1: 拆分任务</h3><p>最先是按照 <a href="https://github.com/gulpjs/gulp/blob/master/docs/recipes/split-tasks-across-multiple-files.md">https://github.com/gulpjs/gulp/blob/master/docs/recipes/split-tasks-across-multiple-files.md</a> 此文档中的架构进行迭代的</p>
+<h4 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">gulpfile.<span class="property">js</span></span><br><span class="line">tasks/</span><br><span class="line">├── xxxx.<span class="property">js</span></span><br><span class="line">├── xxxx.<span class="property">js</span></span><br><span class="line">└── image.<span class="property">js</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="image-js"><a href="#image-js" class="headerlink" title="image.js"></a>image.js</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> imagemin = <span class="built_in">require</span>(<span class="string">&quot;gulp-imagemin&quot;</span>);</span><br><span class="line"></span><br><span class="line">gulp.<span class="title function_">task</span>(<span class="string">&quot;img&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> gulp</span><br><span class="line">    .<span class="title function_">src</span>(<span class="string">&quot;./images/**/*.*&quot;</span>)</span><br><span class="line">    .<span class="title function_">pipe</span>(</span><br><span class="line">      <span class="title function_">imagemin</span>(&#123;</span><br><span class="line">        <span class="attr">optimizationLevel</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="attr">progressive</span>: <span class="literal">true</span>,</span><br><span class="line">      &#125;)</span><br><span class="line">    )</span><br><span class="line">    .<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&quot;./imagemini&quot;</span>));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="gulpfile-js"><a href="#gulpfile-js" class="headerlink" title="gulpfile.js"></a>gulpfile.js</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> requireDir = <span class="built_in">require</span>(<span class="string">&quot;require-dir&quot;</span>),</span><br><span class="line">  tasks = <span class="title function_">requireDir</span>(<span class="string">&quot;./tasks&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这种文件架构让任务按照类型分成子任务放在单独的文件中，顿时感觉干净了很多，这时可以自由的添加子任务，而不用管 <code>gulpfile.js</code>, 此时子任务好比插件，需要就添加，没用就删除，相当方便</p>
+<h3 id="3-重构迭代-2-避免模块和插件重复依赖"><a href="#3-重构迭代-2-避免模块和插件重复依赖" class="headerlink" title="3 重构迭代 2: 避免模块和插件重复依赖"></a>3 重构迭代 2: 避免模块和插件重复依赖</h3><p>随着时间的推移，发现这种组织架构还是有些不方便，不方便在哪里呢，每一个任务文件中，我都要写 <code>var xxx = require(&#39;xxx&#39;)</code>, 如果你是用上面的架构，任务多的时候，估计也会抓狂，因为你会发现 <code>插件和模块依赖被重复的引入进来</code>，这样就提高了成本</p>
+<p>我不想在子任务文件中重复的引入 <code>插件或模块依赖</code>，有没有上面好方法，<code>stackoverflow</code> 是个好老师，老师告知：</p>
+<ul>
+<li>使用 <code>gulp-load-plugins</code> 插件<br>地址：<a href="https://www.npmjs.com/package/gulp-load-plugins">https://www.npmjs.com/package/gulp-load-plugins</a></li>
+<li>把子任务封装成模块</li>
+</ul>
+<h4 id="代码结构"><a href="#代码结构" class="headerlink" title="代码结构"></a>代码结构</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">gulpfile.<span class="property">js</span></span><br><span class="line">tasks/</span><br><span class="line">├── xxxx.<span class="property">js</span></span><br><span class="line">├── xxxx.<span class="property">js</span></span><br><span class="line">└── image.<span class="property">js</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="gulpfile-js-1"><a href="#gulpfile-js-1" class="headerlink" title="gulpfile.js"></a>gulpfile.js</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">&quot;gulp&quot;</span>),</span><br><span class="line">  gulpLoadPlugins = <span class="built_in">require</span>(<span class="string">&quot;gulp-load-plugins&quot;</span>);</span><br><span class="line"><span class="comment">// 这里请查看文档</span></span><br><span class="line">gulpLoadPlugins.<span class="property">imagemin</span> = <span class="built_in">require</span>(<span class="string">&quot;gulp-imagemin&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">require</span>(<span class="string">&quot;./tasks/image&quot;</span>)(gulp, gulpLoadPlugins);</span><br></pre></td></tr></table></figure>
+
+<h4 id="image-js-1"><a href="#image-js-1" class="headerlink" title="image.js"></a>image.js</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="keyword">function</span> (<span class="params">gulp, Plugin</span>) &#123;</span><br><span class="line">  gulp.<span class="title function_">task</span>(<span class="string">&quot;img&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> gulp</span><br><span class="line">      .<span class="title function_">src</span>(<span class="string">&quot;./images/**/*.*&quot;</span>)</span><br><span class="line">      .<span class="title function_">pipe</span>(</span><br><span class="line">        <span class="title class_">Plugin</span>.<span class="title function_">imagemin</span>(&#123;</span><br><span class="line">          <span class="attr">optimizationLevel</span>: <span class="number">2</span>,</span><br><span class="line">          <span class="attr">progressive</span>: <span class="literal">true</span>,</span><br><span class="line">        &#125;)</span><br><span class="line">      )</span><br><span class="line">      .<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&quot;./imagemini&quot;</span>));</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>运行任务 一切正常，此时一个文件测试已经 ok</p>
+<p>但是 <code>./tasks</code> 下面是有很多的子任务，所以需要一个迭代加载，修改 <code>gulpfile.js</code> 如下</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">&quot;gulp&quot;</span>),</span><br><span class="line">  gulpLoadPlugins = <span class="built_in">require</span>(<span class="string">&quot;gulp-load-plugins&quot;</span>),</span><br><span class="line">  <span class="comment">// 这里获取子任务文件列表 使用了 fs 模块</span></span><br><span class="line">  gulpTaskList = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>).<span class="title function_">readdirSync</span>(<span class="string">&quot;./tasks/&quot;</span>);</span><br><span class="line"><span class="comment">// 这里请查看文档</span></span><br><span class="line">gulpLoadPlugins.<span class="property">imagemin</span> = <span class="built_in">require</span>(<span class="string">&quot;gulp-imagemin&quot;</span>);</span><br><span class="line"></span><br><span class="line">gulpTaskList.<span class="title function_">forEach</span>(<span class="keyword">function</span> (<span class="params">taskfile</span>) &#123;</span><br><span class="line">  <span class="built_in">require</span>(<span class="string">&quot;./tasks/&quot;</span> + taskfile)(gulp, gulpLoadPlugins);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这一次迭代避免了<code>重复依赖</code>的问题，但是你会发现，所有的依赖都声明在 <code>gulpTaskList</code> 命名空间下，如果你依赖很多插件或模块，<code>gulpfile.js</code> 也是相当长，鱼和熊掌不可兼得，在现在情况下，只能寻找最佳的解决方案</p>
+<h3 id="4-重构迭代-3-参数配置全局化"><a href="#4-重构迭代-3-参数配置全局化" class="headerlink" title="4 重构迭代 3: 参数配置全局化"></a>4 重构迭代 3: 参数配置全局化</h3><p>其实第二部迭代之后，就可以满足大部分需求，但还是有小伙伴抱怨，有些子任务有相同的参数，能不能抽取出来，放到一个单独的文件中，so 继续翻阅文档</p>
+<p>参考文档<a href="https://github.com/gulpjs/gulp/blob/master/docs/recipes/using-external-config-file.md">https://github.com/gulpjs/gulp/blob/master/docs/recipes/using-external-config-file.md</a></p>
+<h4 id="代码结构-1"><a href="#代码结构-1" class="headerlink" title="代码结构"></a>代码结构</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">gulpfile.<span class="property">js</span></span><br><span class="line">gulp</span><br><span class="line">├── config.<span class="property">json</span></span><br><span class="line">├── tasks/</span><br><span class="line">    ├── xxxx.<span class="property">js</span></span><br><span class="line">    ├── xxxx.<span class="property">js</span></span><br><span class="line">    └── image.<span class="property">js</span></span><br></pre></td></tr></table></figure>
+
+<p><code>注意：文件夹层次变了</code></p>
+<h4 id="config-json"><a href="#config-json" class="headerlink" title="config.json"></a>config.json</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;pnglevel&quot;</span>: <span class="number">2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="gulpfile-js-2"><a href="#gulpfile-js-2" class="headerlink" title="gulpfile.js"></a>gulpfile.js</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">&#x27;gulp&#x27;</span>)</span><br><span class="line">  , config = <span class="built_in">require</span>(<span class="string">&#x27;./gulp/config.json&#x27;</span>);</span><br><span class="line">  , gulpLoadPlugins = <span class="built_in">require</span>(<span class="string">&#x27;gulp-load-plugins&#x27;</span>)</span><br><span class="line">  , gulpTaskList = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>).<span class="title function_">readdirSync</span>(<span class="string">&#x27;./gulp/tasks/&#x27;</span>)</span><br><span class="line">  ;</span><br><span class="line"></span><br><span class="line">gulpLoadPlugins.<span class="property">imagemin</span> = <span class="built_in">require</span>(<span class="string">&#x27;gulp-imagemin&#x27;</span>);</span><br><span class="line"></span><br><span class="line">gulpTaskList.<span class="title function_">forEach</span>(<span class="keyword">function</span>(<span class="params">taskfile</span>) &#123;</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">&#x27;./gulp/tasks/&#x27;</span> + taskfile)(gulp, gulpLoadPlugins, config);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="image-js-2"><a href="#image-js-2" class="headerlink" title="image.js"></a>image.js</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="keyword">function</span> (<span class="params">gulp, Plugin, config</span>) &#123;</span><br><span class="line">  gulp.<span class="title function_">task</span>(<span class="string">&quot;img&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> gulp</span><br><span class="line">      .<span class="title function_">src</span>(<span class="string">&quot;./images/**/*.*&quot;</span>)</span><br><span class="line">      .<span class="title function_">pipe</span>(</span><br><span class="line">        <span class="title class_">Plugin</span>.<span class="title function_">imagemin</span>(&#123;</span><br><span class="line">          <span class="attr">optimizationLevel</span>: config.<span class="property">pnglevel</span>,</span><br><span class="line">          <span class="attr">progressive</span>: <span class="literal">true</span>,</span><br><span class="line">        &#125;)</span><br><span class="line">      )</span><br><span class="line">      .<span class="title function_">pipe</span>(gulp.<span class="title function_">dest</span>(<span class="string">&quot;./imagemini&quot;</span>));</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>此次迭代结束后，我把子任务中通用的配置都写到 <code>./gulp/config.json</code> 中，全局配置</p>
+<h3 id="5-重构迭代-4-参数配置模块化"><a href="#5-重构迭代-4-参数配置模块化" class="headerlink" title="5 重构迭代 4: 参数配置模块化"></a>5 重构迭代 4: 参数配置模块化</h3><p>此次迭代紧跟迭代 3，<code>json</code> 不够完美，不想每次去写 <code>&quot;&quot;</code>, 这里我把配置文件封装成一个模块</p>
+<p>即迭代 3 中的 <code>config.json</code> 变成了 <code>config.js</code></p>
+<h4 id="config-js"><a href="#config-js" class="headerlink" title="config.js"></a>config.js</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> config = &#123;</span><br><span class="line">    <span class="attr">pnglevel</span>: <span class="number">2</span>,</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> config;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="gulpfile-js-加载"><a href="#gulpfile-js-加载" class="headerlink" title="gulpfile.js 加载"></a>gulpfile.js 加载</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> config = <span class="built_in">require</span>(<span class="string">&quot;./gulp/gulp.config&quot;</span>)();</span><br></pre></td></tr></table></figure>
+
+<p>其他不变，当封装成一个模块的时候，你就发现好处多多了，可以在模块中添加函数，你也可以把配置拆分，根据你的业务需要，自由调整</p>
+<h3 id="6-后记"><a href="#6-后记" class="headerlink" title="6 后记"></a>6 后记</h3><p>通过 4 步的迭代，整个代码组织架构就清晰多了，很感谢这么多热爱开源，乐于助人的朋友，谢谢</p>
+<p>注意：子任务中注意文件夹的层次，子任务中的文件夹是以 <code>gulpfile.js</code> 为基准，因为 <code>gulpfile.js</code> 把子任务都包含进来了</p>
+]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>Gulp</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux 不同的发行版设置静态 IP</title>
     <url>/posts/29624/</url>
     <content><![CDATA[<p>近来在折腾本地服务器，为了方式每次重启 IP 地址的变化，所以要给机器设置静态 IP <span id="more"></span></p>
@@ -362,6 +362,76 @@
       </categories>
       <tags>
         <tag>Debian</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mysql | 索引查询</title>
+    <url>/posts/8256/</url>
+    <content><![CDATA[<p>发现了一个非常好用的方法，就是使用索引查询<span id="more"></span>，</p>
+<blockquote>
+<p>mysql 版本：8.x</p>
+</blockquote>
+<h2 id="1-查询语法"><a href="#1-查询语法" class="headerlink" title="1 查询语法"></a>1 查询语法</h2><h3 id="1-1-语法解读"><a href="#1-1-语法解读" class="headerlink" title="1.1 语法解读"></a>1.1 语法解读</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> [EXTENDED] &#123;INDEX <span class="operator">|</span> INDEXES <span class="operator">|</span> KEYS&#125;</span><br><span class="line">    &#123;<span class="keyword">FROM</span> <span class="operator">|</span> <span class="keyword">IN</span>&#125; tbl_name</span><br><span class="line">    [&#123;<span class="keyword">FROM</span> <span class="operator">|</span> <span class="keyword">IN</span>&#125; db_name]</span><br><span class="line">    [<span class="keyword">WHERE</span> expr]</span><br></pre></td></tr></table></figure>
+
+<p><strong>语法解读</strong><br>这是 <code>SHOW INDEX</code> 命令的完整语法，下面我将逐个解释每个部分：</p>
+<ul>
+<li><code>SHOW</code>：这是开始执行命令的关键字。</li>
+<li><code>[EXTENDED]</code>：这是一个可选的关键字，如果使用了，它会显示隐藏的索引。</li>
+<li><code>&#123;INDEX | INDEXES | KEYS&#125;</code>：你可以选择其中任何一个关键字，它们都可以用来查看索引信息。这三个关键字在功能上是等价的。</li>
+<li><code>&#123;FROM | IN&#125;</code>：这两个关键字在这里的功能也是等价的，它们用来指定我们将从哪个表查看索引信息。</li>
+<li><code>tbl_name</code>：这是你想要查看索引信息的表的名称。</li>
+<li><code>[ &#123;FROM | IN&#125; db_name ]</code>：这是一个可选的部分，用来指定 <code>tbl_name</code> 所在的数据库。如果你已经使用 <code>USE db_name;</code> 选择了数据库，那么你可以省略这部分。</li>
+<li><code>[WHERE expr]</code>：这也是一个可选的部分，可以用来过滤结果。你可以提供一个条件表达式来限制返回的行。例如，你可以使用 <code>WHERE Key_name = &#39;PRIMARY&#39;</code> 来只显示主键的信息。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> my_table <span class="keyword">FROM</span> my_database <span class="keyword">WHERE</span> Key_name <span class="operator">=</span> <span class="string">&#x27;PRIMARY&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这个命令将显示数据库 <code>my_database`` 中表 </code>my_table&#96;&#96; 的主键信息。</p>
+<h3 id="1-2-提醒"><a href="#1-2-提醒" class="headerlink" title="1.2 提醒"></a>1.2 提醒</h3><p><strong>An alternative to tbl_name FROM db_name syntax is db_name.tbl_name</strong>. 下面这两条语句是等价的。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> mytable <span class="keyword">FROM</span> mydb;</span><br><span class="line"><span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> mydb.mytable;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-结果字段"><a href="#2-结果字段" class="headerlink" title="2 结果字段"></a>2 结果字段</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">show</span> extended index <span class="keyword">from</span> country <span class="keyword">in</span> mybatis <span class="keyword">where</span> Column_name <span class="operator">=</span> <span class="string">&#x27;id&#x27;</span> \G;</span><br><span class="line"><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span> <span class="number">1.</span> <span class="type">row</span> <span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span></span><br><span class="line">        <span class="keyword">Table</span>: country</span><br><span class="line">   Non_unique: <span class="number">0</span></span><br><span class="line">     Key_name: <span class="keyword">PRIMARY</span></span><br><span class="line"> Seq_in_index: <span class="number">1</span></span><br><span class="line">  Column_name: id</span><br><span class="line">    <span class="keyword">Collation</span>: A</span><br><span class="line">  <span class="keyword">Cardinality</span>: <span class="number">5</span></span><br><span class="line">     Sub_part: <span class="keyword">NULL</span></span><br><span class="line">       Packed: <span class="keyword">NULL</span></span><br><span class="line">         <span class="keyword">Null</span>:</span><br><span class="line">   Index_type: BTREE</span><br><span class="line">      Comment:</span><br><span class="line">Index_comment:</span><br><span class="line">      Visible: YES</span><br><span class="line">   Expression: <span class="keyword">NULL</span></span><br><span class="line"><span class="number">1</span> <span class="type">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+
+<p>下面针对查询结果中每个字段给出详细的解释：</p>
+<ul>
+<li><p><strong>Table</strong><br>表名。</p>
+</li>
+<li><p><strong>Non_unique</strong><br>如果索引不能包含重复项，则为 <code>0</code>；如果可以，则为 <code>1</code>。也就是我们平时所说的唯一索引</p>
+</li>
+<li><p><strong>Key_name</strong><br>索引的名称，如果名字相同则表明是同一个索引，而并不是重复，名字相同的是联合索引。如果索引是主键索引，那么索引名称永远都是 <code>PRIMARY</code></p>
+</li>
+<li><p><strong>Seq_in_index</strong><br>索引中的列序号，对于多列索引，第一列为 <code>1</code>，第二列为 <code>2</code>，依此类推。</p>
+</li>
+<li><p><strong>Column_name</strong><br>索引的列名。</p>
+</li>
+<li><p><strong>Collation</strong><br>列在索引中的排序方式。有 <code>A（升序）</code>，<code>D（降序）</code>，<code>NULL（无排序）</code>。</p>
+</li>
+<li><p><strong>Cardinality</strong><br>索引中唯一值的数目的估计值。对于非唯一索引，该值是 <code>NULL</code>。要更新这个数字，请运行 <code> ANALYZE TABLE</code> 或（对于 <code>MyISAM</code> 表）<code>myisamchk -a</code>。</p>
+<p>我们知道某个字段的重复值越少越适合建索引，所以我们一般都是根据 <code>Cardinality</code> 来判断索引是否具有高选择性，如果这个值非常小，那就需要重新评估这个字段是否适合建立索引。<code>Cardinality</code> 越大，使用此索引的机会就越大。</p>
+</li>
+<li><p><strong>Sub_part</strong><br>前置索引的意思，如果列只是被部分地编入索引，则为被编入索引的字符数。对于完全编入索引的列，此值为 <code>NULL</code>。</p>
+</li>
+<li><p><strong>Packed</strong><br>MySQL 用来使索引更小的数据压缩方式。此值通常为 <code>NULL</code>。压缩一般包括压缩传输协议、压缩列解决方案和压缩表解决方案。</p>
+</li>
+<li><p><strong>Null</strong><br>如果列可能包含 <code>NULL</code> 值，则为 <code>YES</code>；否则，则为 <code>NO</code>。</p>
+</li>
+<li><p><strong>Index_type</strong><br>使用的索引方法（例如 <code>BTREE, FULLTEXT, HASH, RTREE</code>）。</p>
+</li>
+<li><p><strong>Comment</strong><br>索引列中未说明的有关索引的信息，例如，如果索引已禁用，则表示已禁用。</p>
+</li>
+<li><p><strong>Index_comment</strong><br>这个字段包含了在创建索引时指定的注释。例如，在执行 <code>CREATE INDEX</code> 或 <code>ALTER TABLE</code> 语句时，你可以使用 <code>COMMENT</code> 选项来添加注释。。</p>
+</li>
+<li><p><strong>Visible</strong><br>这个字段在 <code>MySQL 8.0.12</code> 及之后的版本中被引入。它表明索引是否是可见的。如果索引是可见的（<code>Visible</code> 的值为 <code>YES</code>），那么优化器可以选择使用这个索引来执行查<br>询。如果索引是不可见的（<code>Visible</code> 的值为 <code>NO</code>），那么优化器将不会使用这个索引来执行查询。</p>
+</li>
+<li><p><strong>Expression</strong><br>关于索引的一些注解信息。</p>
+</li>
+</ul>
+<p>请注意，如果你要查看的表在一个特定的数据库中，你可能需要先使用 <code>USE database_name;</code> 来选择那个数据库。</p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>Mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -455,76 +525,6 @@
       </categories>
       <tags>
         <tag>日志</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mysql | 索引查询</title>
-    <url>/posts/8256/</url>
-    <content><![CDATA[<p>发现了一个非常好用的方法，就是使用索引查询<span id="more"></span>，</p>
-<blockquote>
-<p>mysql 版本：8.x</p>
-</blockquote>
-<h2 id="1-查询语法"><a href="#1-查询语法" class="headerlink" title="1 查询语法"></a>1 查询语法</h2><h3 id="1-1-语法解读"><a href="#1-1-语法解读" class="headerlink" title="1.1 语法解读"></a>1.1 语法解读</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> [EXTENDED] &#123;INDEX <span class="operator">|</span> INDEXES <span class="operator">|</span> KEYS&#125;</span><br><span class="line">    &#123;<span class="keyword">FROM</span> <span class="operator">|</span> <span class="keyword">IN</span>&#125; tbl_name</span><br><span class="line">    [&#123;<span class="keyword">FROM</span> <span class="operator">|</span> <span class="keyword">IN</span>&#125; db_name]</span><br><span class="line">    [<span class="keyword">WHERE</span> expr]</span><br></pre></td></tr></table></figure>
-
-<p><strong>语法解读</strong><br>这是 <code>SHOW INDEX</code> 命令的完整语法，下面我将逐个解释每个部分：</p>
-<ul>
-<li><code>SHOW</code>：这是开始执行命令的关键字。</li>
-<li><code>[EXTENDED]</code>：这是一个可选的关键字，如果使用了，它会显示隐藏的索引。</li>
-<li><code>&#123;INDEX | INDEXES | KEYS&#125;</code>：你可以选择其中任何一个关键字，它们都可以用来查看索引信息。这三个关键字在功能上是等价的。</li>
-<li><code>&#123;FROM | IN&#125;</code>：这两个关键字在这里的功能也是等价的，它们用来指定我们将从哪个表查看索引信息。</li>
-<li><code>tbl_name</code>：这是你想要查看索引信息的表的名称。</li>
-<li><code>[ &#123;FROM | IN&#125; db_name ]</code>：这是一个可选的部分，用来指定 <code>tbl_name</code> 所在的数据库。如果你已经使用 <code>USE db_name;</code> 选择了数据库，那么你可以省略这部分。</li>
-<li><code>[WHERE expr]</code>：这也是一个可选的部分，可以用来过滤结果。你可以提供一个条件表达式来限制返回的行。例如，你可以使用 <code>WHERE Key_name = &#39;PRIMARY&#39;</code> 来只显示主键的信息。</li>
-</ul>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> my_table <span class="keyword">FROM</span> my_database <span class="keyword">WHERE</span> Key_name <span class="operator">=</span> <span class="string">&#x27;PRIMARY&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
-<p>这个命令将显示数据库 <code>my_database`` 中表 </code>my_table&#96;&#96; 的主键信息。</p>
-<h3 id="1-2-提醒"><a href="#1-2-提醒" class="headerlink" title="1.2 提醒"></a>1.2 提醒</h3><p><strong>An alternative to tbl_name FROM db_name syntax is db_name.tbl_name</strong>. 下面这两条语句是等价的。</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> mytable <span class="keyword">FROM</span> mydb;</span><br><span class="line"><span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> mydb.mytable;</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-结果字段"><a href="#2-结果字段" class="headerlink" title="2 结果字段"></a>2 结果字段</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">show</span> extended index <span class="keyword">from</span> country <span class="keyword">in</span> mybatis <span class="keyword">where</span> Column_name <span class="operator">=</span> <span class="string">&#x27;id&#x27;</span> \G;</span><br><span class="line"><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span> <span class="number">1.</span> <span class="type">row</span> <span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span></span><br><span class="line">        <span class="keyword">Table</span>: country</span><br><span class="line">   Non_unique: <span class="number">0</span></span><br><span class="line">     Key_name: <span class="keyword">PRIMARY</span></span><br><span class="line"> Seq_in_index: <span class="number">1</span></span><br><span class="line">  Column_name: id</span><br><span class="line">    <span class="keyword">Collation</span>: A</span><br><span class="line">  <span class="keyword">Cardinality</span>: <span class="number">5</span></span><br><span class="line">     Sub_part: <span class="keyword">NULL</span></span><br><span class="line">       Packed: <span class="keyword">NULL</span></span><br><span class="line">         <span class="keyword">Null</span>:</span><br><span class="line">   Index_type: BTREE</span><br><span class="line">      Comment:</span><br><span class="line">Index_comment:</span><br><span class="line">      Visible: YES</span><br><span class="line">   Expression: <span class="keyword">NULL</span></span><br><span class="line"><span class="number">1</span> <span class="type">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
-
-<p>下面针对查询结果中每个字段给出详细的解释：</p>
-<ul>
-<li><p><strong>Table</strong><br>表名。</p>
-</li>
-<li><p><strong>Non_unique</strong><br>如果索引不能包含重复项，则为 <code>0</code>；如果可以，则为 <code>1</code>。也就是我们平时所说的唯一索引</p>
-</li>
-<li><p><strong>Key_name</strong><br>索引的名称，如果名字相同则表明是同一个索引，而并不是重复，名字相同的是联合索引。如果索引是主键索引，那么索引名称永远都是 <code>PRIMARY</code></p>
-</li>
-<li><p><strong>Seq_in_index</strong><br>索引中的列序号，对于多列索引，第一列为 <code>1</code>，第二列为 <code>2</code>，依此类推。</p>
-</li>
-<li><p><strong>Column_name</strong><br>索引的列名。</p>
-</li>
-<li><p><strong>Collation</strong><br>列在索引中的排序方式。有 <code>A（升序）</code>，<code>D（降序）</code>，<code>NULL（无排序）</code>。</p>
-</li>
-<li><p><strong>Cardinality</strong><br>索引中唯一值的数目的估计值。对于非唯一索引，该值是 <code>NULL</code>。要更新这个数字，请运行 <code> ANALYZE TABLE</code> 或（对于 <code>MyISAM</code> 表）<code>myisamchk -a</code>。</p>
-<p>我们知道某个字段的重复值越少越适合建索引，所以我们一般都是根据 <code>Cardinality</code> 来判断索引是否具有高选择性，如果这个值非常小，那就需要重新评估这个字段是否适合建立索引。<code>Cardinality</code> 越大，使用此索引的机会就越大。</p>
-</li>
-<li><p><strong>Sub_part</strong><br>前置索引的意思，如果列只是被部分地编入索引，则为被编入索引的字符数。对于完全编入索引的列，此值为 <code>NULL</code>。</p>
-</li>
-<li><p><strong>Packed</strong><br>MySQL 用来使索引更小的数据压缩方式。此值通常为 <code>NULL</code>。压缩一般包括压缩传输协议、压缩列解决方案和压缩表解决方案。</p>
-</li>
-<li><p><strong>Null</strong><br>如果列可能包含 <code>NULL</code> 值，则为 <code>YES</code>；否则，则为 <code>NO</code>。</p>
-</li>
-<li><p><strong>Index_type</strong><br>使用的索引方法（例如 <code>BTREE, FULLTEXT, HASH, RTREE</code>）。</p>
-</li>
-<li><p><strong>Comment</strong><br>索引列中未说明的有关索引的信息，例如，如果索引已禁用，则表示已禁用。</p>
-</li>
-<li><p><strong>Index_comment</strong><br>这个字段包含了在创建索引时指定的注释。例如，在执行 <code>CREATE INDEX</code> 或 <code>ALTER TABLE</code> 语句时，你可以使用 <code>COMMENT</code> 选项来添加注释。。</p>
-</li>
-<li><p><strong>Visible</strong><br>这个字段在 <code>MySQL 8.0.12</code> 及之后的版本中被引入。它表明索引是否是可见的。如果索引是可见的（<code>Visible</code> 的值为 <code>YES</code>），那么优化器可以选择使用这个索引来执行查<br>询。如果索引是不可见的（<code>Visible</code> 的值为 <code>NO</code>），那么优化器将不会使用这个索引来执行查询。</p>
-</li>
-<li><p><strong>Expression</strong><br>关于索引的一些注解信息。</p>
-</li>
-</ul>
-<p>请注意，如果你要查看的表在一个特定的数据库中，你可能需要先使用 <code>USE database_name;</code> 来选择那个数据库。</p>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>Mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -652,47 +652,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Django | Mysql 返回不合法的日期时间对象</title>
-    <url>/posts/26483/</url>
-    <content><![CDATA[<h3 id="1-错误描述"><a href="#1-错误描述" class="headerlink" title="1 错误描述"></a>1 错误描述</h3><p>在查询数据集中的日期时间对象时</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">38</span>]: Device.objects.datetimes(<span class="string">&#x27;latest_alarm_time&#x27;</span>, <span class="string">&#x27;month&#x27;</span>)</span><br><span class="line"></span><br><span class="line">Out[<span class="number">38</span>]: SELECT DISTINCT</span><br><span class="line">CAST(DATE_FORMAT(CONVERT_TZ(`device_device`.`latest_alarm_time`, <span class="string">&#x27;UTC&#x27;</span>, <span class="string">&#x27;Asia/Shanghai&#x27;</span>), <span class="string">&#x27;%Y-%m-01 00:00:00&#x27;</span>) AS DATETIME) AS `datetimefield` FROM `device_device` WHERE `device_device`.`latest_alarm_time` IS NOT NULL ORDER BY `datetimefield` ASC LIMIT <span class="number">21</span></span><br></pre></td></tr></table></figure>
-
-<p>然后报错</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ValueError: Database returned an invalid datetime value. Are time zone definitions <span class="keyword">for</span> your database installed?</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-解决问题"><a href="#2-解决问题" class="headerlink" title="2 解决问题"></a>2 解决问题</h3><p>实际情况，数据库中是有数据，目测月份提取失败；到 mysql 执行了下</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">mysql root@localhost:py365&gt; select convert_tz(<span class="string">&#x27;2018-05-10 12:30:00&#x27;</span>, <span class="string">&#x27;UTC&#x27;</span>, <span class="string">&#x27;Asia/Shanghai&#x27;</span>);</span><br><span class="line">+-------------------------------------------------------------+</span><br><span class="line">| convert_tz(<span class="string">&#x27;2018-05-10 12:30:00&#x27;</span>, <span class="string">&#x27;UTC&#x27;</span>, <span class="string">&#x27;Asia/Shanghai&#x27;</span>)   |</span><br><span class="line">|-------------------------------------------------------------|</span><br><span class="line">| NULL                                                        |</span><br><span class="line">+-------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
-
-<p>果然，结果返回令人诧异的 <code>NULL</code></p>
-<p>看了下 Django orm 的 datetimes 官方文档</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Note</span><br><span class="line">This function performs time zone conversions directly <span class="keyword">in</span> the database. As a consequence, your database must be able to interpret the value of tzinfo.tzname(<span class="literal">None</span>). This translates into the following requirements:</span><br><span class="line"></span><br><span class="line">SQLite: no requirements. Conversions are performed <span class="keyword">in</span> Python <span class="keyword">with</span> pytz (installed when you install Django).</span><br><span class="line">PostgreSQL: no requirements (see Time Zones).</span><br><span class="line">Oracle: no requirements (see Choosing a Time Zone File).</span><br><span class="line">MySQL: load the time zone tables <span class="keyword">with</span> mysql_tzinfo_to_sql.</span><br></pre></td></tr></table></figure>
-
-<p>即 mysql 需要使用 mysql_tzinfo_to_sql 载入时区表，接着跳到 <a href="https://dev.mysql.com/doc/refman/8.0/en/mysql-tzinfo-to-sql.html">https://dev.mysql.com/doc/refman/8.0/en/mysql-tzinfo-to-sql.html</a></p>
-<p>按照 mysql 官方的文档</p>
-<p><code>For the first invocation syntax, pass the zoneinfo directory path name to mysql_tzinfo_to_sql and send the output into the mysql program. For example:</code></p>
-<p>我需要按照以下命令执行</p>
-<blockquote>
-<p>mysql_tzinfo_to_sql &#x2F;usr&#x2F;share&#x2F;zoneinfo | mysql -u root mysql</p>
-</blockquote>
-<p>然后再次执行上面执行过的转换语句</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">mysql root@localhost:py365&gt; select convert_tz(<span class="string">&#x27;2018-05-10 12:30:00&#x27;</span>, <span class="string">&#x27;UTC&#x27;</span>, <span class="string">&#x27;Asia/Shanghai&#x27;</span>);</span><br><span class="line">+-------------------------------------------------------------+</span><br><span class="line">| convert_tz(<span class="string">&#x27;2018-05-10 12:30:00&#x27;</span>, <span class="string">&#x27;UTC&#x27;</span>, <span class="string">&#x27;Asia/Shanghai&#x27;</span>)   |</span><br><span class="line">|-------------------------------------------------------------|</span><br><span class="line">| <span class="number">2018</span>-05-<span class="number">10</span> <span class="number">20</span>:<span class="number">30</span>:<span class="number">00</span>                                         |</span><br><span class="line">+-------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
-
-<p>yes，返回了正确的结果；</p>
-<p>在 shell 中 执行数据库查询语句</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">45</span>]: Device.objects.datetimes(<span class="string">&#x27;latest_alarm_time&#x27;</span>, <span class="string">&#x27;month&#x27;</span>)</span><br><span class="line">Out[<span class="number">45</span>]: SELECT DISTINCT CAST(DATE_FORMAT(CONVERT_TZ(`device_device`.`latest_alarm_time`, <span class="string">&#x27;UTC&#x27;</span>, <span class="string">&#x27;Asia/Shanghai&#x27;</span>), <span class="string">&#x27;%Y-%m-01 00:00:00&#x27;</span>) AS DATETIME) AS `datetimefield` FROM `device_device` WHERE `device_device`.`latest_alarm_time` IS NOT NULL ORDER BY `datetimefield` ASC LIMIT <span class="number">21</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Execution time: <span class="number">0.000591</span>s [Database: default]</span><br><span class="line"></span><br><span class="line">&lt;QuerySet [datetime.datetime(<span class="number">2018</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, tzinfo=&lt;DstTzInfo <span class="string">&#x27;Asia/Shanghai&#x27;</span> CST+<span class="number">8</span>:<span class="number">00</span>:<span class="number">00</span> STD&gt;)]&gt;</span><br></pre></td></tr></table></figure>
-
-<p>正常，so 问题解决，看来还得认真看文档呀</p>
-]]></content>
-      <categories>
-        <category>后端</category>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>Mysql</tag>
-        <tag>Django</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Django | 信号使用思考</title>
     <url>/posts/51727/</url>
     <content><![CDATA[<p>重拾些许关于信号模块使用的记忆，记录对于 <code>Django</code> 信号使用的思考。 <span id="more"></span></p>
@@ -770,47 +729,44 @@
       </tags>
   </entry>
   <entry>
-    <title>资源加速系列之 pip</title>
-    <url>/posts/26327/</url>
-    <content><![CDATA[<p>在 <code>python</code> 项目中，安装包时，都会从官方默认的源：<span id="more"></span></p>
-<figure class="highlight avrasm"><table><tr><td class="code"><pre><span class="line"><span class="symbol">https:</span>//pypi<span class="meta">.org</span>/simple</span><br></pre></td></tr></table></figure>
+    <title>Django | Mysql 返回不合法的日期时间对象</title>
+    <url>/posts/26483/</url>
+    <content><![CDATA[<h3 id="1-错误描述"><a href="#1-错误描述" class="headerlink" title="1 错误描述"></a>1 错误描述</h3><p>在查询数据集中的日期时间对象时</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">38</span>]: Device.objects.datetimes(<span class="string">&#x27;latest_alarm_time&#x27;</span>, <span class="string">&#x27;month&#x27;</span>)</span><br><span class="line"></span><br><span class="line">Out[<span class="number">38</span>]: SELECT DISTINCT</span><br><span class="line">CAST(DATE_FORMAT(CONVERT_TZ(`device_device`.`latest_alarm_time`, <span class="string">&#x27;UTC&#x27;</span>, <span class="string">&#x27;Asia/Shanghai&#x27;</span>), <span class="string">&#x27;%Y-%m-01 00:00:00&#x27;</span>) AS DATETIME) AS `datetimefield` FROM `device_device` WHERE `device_device`.`latest_alarm_time` IS NOT NULL ORDER BY `datetimefield` ASC LIMIT <span class="number">21</span></span><br></pre></td></tr></table></figure>
 
-<p>中下载，速度较慢，原因不多说了，针对这个情况，国内有些公司和机构做了镜像站，以便国内的用户提高下载速度。</p>
-<!--more-->
+<p>然后报错</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ValueError: Database returned an invalid datetime value. Are time zone definitions <span class="keyword">for</span> your database installed?</span><br></pre></td></tr></table></figure>
 
-<h3 id="1-国内的镜像源列表"><a href="#1-国内的镜像源列表" class="headerlink" title="1 国内的镜像源列表"></a>1 国内的镜像源列表</h3><p>列举几个常用的，少用的就不列了</p>
-<ul>
-<li><a href="https://mirrors.aliyun.com/pypi/simple/">https://mirrors.aliyun.com/pypi/simple/</a> 阿里云</li>
-<li><a href="https://pypi.tuna.tsinghua.edu.cn/simple/">https://pypi.tuna.tsinghua.edu.cn/simple/</a> 清华大学</li>
-<li><a href="https://pypi.doubanio.com/simple/">https://pypi.doubanio.com/simple/</a> 豆瓣</li>
-<li><a href="https://mirrors.ustc.edu.cn/pypi/web/simple/">https://mirrors.ustc.edu.cn/pypi/web/simple/</a> 中国科学技术大学</li>
-</ul>
-<p>上面的源站都测试过，对我来说，首选阿里云，因为确实快</p>
-<h3 id="2-临时指定镜像源"><a href="#2-临时指定镜像源" class="headerlink" title="2 临时指定镜像源"></a>2 临时指定镜像源</h3><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">pip <span class="keyword">install</span> -i 镜像源地址 包名称</span><br></pre></td></tr></table></figure>
+<h3 id="2-解决问题"><a href="#2-解决问题" class="headerlink" title="2 解决问题"></a>2 解决问题</h3><p>实际情况，数据库中是有数据，目测月份提取失败；到 mysql 执行了下</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">mysql root@localhost:py365&gt; select convert_tz(<span class="string">&#x27;2018-05-10 12:30:00&#x27;</span>, <span class="string">&#x27;UTC&#x27;</span>, <span class="string">&#x27;Asia/Shanghai&#x27;</span>);</span><br><span class="line">+-------------------------------------------------------------+</span><br><span class="line">| convert_tz(<span class="string">&#x27;2018-05-10 12:30:00&#x27;</span>, <span class="string">&#x27;UTC&#x27;</span>, <span class="string">&#x27;Asia/Shanghai&#x27;</span>)   |</span><br><span class="line">|-------------------------------------------------------------|</span><br><span class="line">| NULL                                                        |</span><br><span class="line">+-------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
 
-<p>例如安装 <code>django</code>，选用阿里云镜像源，则</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">pip install -i https:<span class="regexp">//mi</span>rrors.aliyun.com<span class="regexp">/pypi/</span>simple/ django</span><br></pre></td></tr></table></figure>
+<p>果然，结果返回令人诧异的 <code>NULL</code></p>
+<p>看了下 Django orm 的 datetimes 官方文档</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Note</span><br><span class="line">This function performs time zone conversions directly <span class="keyword">in</span> the database. As a consequence, your database must be able to interpret the value of tzinfo.tzname(<span class="literal">None</span>). This translates into the following requirements:</span><br><span class="line"></span><br><span class="line">SQLite: no requirements. Conversions are performed <span class="keyword">in</span> Python <span class="keyword">with</span> pytz (installed when you install Django).</span><br><span class="line">PostgreSQL: no requirements (see Time Zones).</span><br><span class="line">Oracle: no requirements (see Choosing a Time Zone File).</span><br><span class="line">MySQL: load the time zone tables <span class="keyword">with</span> mysql_tzinfo_to_sql.</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-全局设置镜像源"><a href="#3-全局设置镜像源" class="headerlink" title="3 全局设置镜像源"></a>3 全局设置镜像源</h3><p>我个人使用的是 mac，步骤：</p>
-<p>1 在用户主目录下 <code>~/.config</code> 中新建 <code>pip</code> 文件夹（也可以直接在用户主目录下建立 <code>.pip</code> 文件夹)</p>
-<p>2 在上一步新建的文件中新建 <code>pip.conf</code></p>
-<p>3 在 <code>pip.conf</code> 文件中添加以下配置</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="keyword">global</span>]</span><br><span class="line">timeout = <span class="number">60</span></span><br><span class="line">index-url = https://mirrors.aliyun.com/pypi/simple</span><br><span class="line"></span><br><span class="line">[install]</span><br><span class="line">trusted-host=mirrors.aliyun.com</span><br></pre></td></tr></table></figure>
+<p>即 mysql 需要使用 mysql_tzinfo_to_sql 载入时区表，接着跳到 <a href="https://dev.mysql.com/doc/refman/8.0/en/mysql-tzinfo-to-sql.html">https://dev.mysql.com/doc/refman/8.0/en/mysql-tzinfo-to-sql.html</a></p>
+<p>按照 mysql 官方的文档</p>
+<p><code>For the first invocation syntax, pass the zoneinfo directory path name to mysql_tzinfo_to_sql and send the output into the mysql program. For example:</code></p>
+<p>我需要按照以下命令执行</p>
+<blockquote>
+<p>mysql_tzinfo_to_sql &#x2F;usr&#x2F;share&#x2F;zoneinfo | mysql -u root mysql</p>
+</blockquote>
+<p>然后再次执行上面执行过的转换语句</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">mysql root@localhost:py365&gt; select convert_tz(<span class="string">&#x27;2018-05-10 12:30:00&#x27;</span>, <span class="string">&#x27;UTC&#x27;</span>, <span class="string">&#x27;Asia/Shanghai&#x27;</span>);</span><br><span class="line">+-------------------------------------------------------------+</span><br><span class="line">| convert_tz(<span class="string">&#x27;2018-05-10 12:30:00&#x27;</span>, <span class="string">&#x27;UTC&#x27;</span>, <span class="string">&#x27;Asia/Shanghai&#x27;</span>)   |</span><br><span class="line">|-------------------------------------------------------------|</span><br><span class="line">| <span class="number">2018</span>-05-<span class="number">10</span> <span class="number">20</span>:<span class="number">30</span>:<span class="number">00</span>                                         |</span><br><span class="line">+-------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
 
-<p>可以阅览官方文档：<a href="https://pip.pypa.io/en/stable/user_guide/#config-file">https://pip.pypa.io/en/stable/user_guide/#config-file</a></p>
-<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">You can <span class="built_in">set</span> <span class="keyword">a</span> custom path location <span class="keyword">for</span> this config</span><br><span class="line"><span class="built_in">file</span> <span class="keyword">using</span> <span class="keyword">the</span> environment <span class="built_in">variable</span> PIP_CONFIG_FILE.</span><br></pre></td></tr></table></figure>
+<p>yes，返回了正确的结果；</p>
+<p>在 shell 中 执行数据库查询语句</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">45</span>]: Device.objects.datetimes(<span class="string">&#x27;latest_alarm_time&#x27;</span>, <span class="string">&#x27;month&#x27;</span>)</span><br><span class="line">Out[<span class="number">45</span>]: SELECT DISTINCT CAST(DATE_FORMAT(CONVERT_TZ(`device_device`.`latest_alarm_time`, <span class="string">&#x27;UTC&#x27;</span>, <span class="string">&#x27;Asia/Shanghai&#x27;</span>), <span class="string">&#x27;%Y-%m-01 00:00:00&#x27;</span>) AS DATETIME) AS `datetimefield` FROM `device_device` WHERE `device_device`.`latest_alarm_time` IS NOT NULL ORDER BY `datetimefield` ASC LIMIT <span class="number">21</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Execution time: <span class="number">0.000591</span>s [Database: default]</span><br><span class="line"></span><br><span class="line">&lt;QuerySet [datetime.datetime(<span class="number">2018</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, tzinfo=&lt;DstTzInfo <span class="string">&#x27;Asia/Shanghai&#x27;</span> CST+<span class="number">8</span>:<span class="number">00</span>:<span class="number">00</span> STD&gt;)]&gt;</span><br></pre></td></tr></table></figure>
 
-<p>用户可以自定义配置文件路径，配置好环境变量 <code>PIP_CONFIG_FILE</code> 即可。</p>
-<p>后续再安装 <code>python</code> 包都会使用设置好的源，节省时间。</p>
+<p>正常，so 问题解决，看来还得认真看文档呀</p>
 ]]></content>
       <categories>
-        <category>资源加速</category>
         <category>后端</category>
         <category>Python</category>
       </categories>
       <tags>
-        <tag>加速</tag>
-        <tag>镜像</tag>
+        <tag>Mysql</tag>
+        <tag>Django</tag>
       </tags>
   </entry>
   <entry>
@@ -887,6 +843,50 @@
       </categories>
       <tags>
         <tag>Django</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>资源加速系列之 pip</title>
+    <url>/posts/26327/</url>
+    <content><![CDATA[<p>在 <code>python</code> 项目中，安装包时，都会从官方默认的源：<span id="more"></span></p>
+<figure class="highlight avrasm"><table><tr><td class="code"><pre><span class="line"><span class="symbol">https:</span>//pypi<span class="meta">.org</span>/simple</span><br></pre></td></tr></table></figure>
+
+<p>中下载，速度较慢，原因不多说了，针对这个情况，国内有些公司和机构做了镜像站，以便国内的用户提高下载速度。</p>
+<!--more-->
+
+<h3 id="1-国内的镜像源列表"><a href="#1-国内的镜像源列表" class="headerlink" title="1 国内的镜像源列表"></a>1 国内的镜像源列表</h3><p>列举几个常用的，少用的就不列了</p>
+<ul>
+<li><a href="https://mirrors.aliyun.com/pypi/simple/">https://mirrors.aliyun.com/pypi/simple/</a> 阿里云</li>
+<li><a href="https://pypi.tuna.tsinghua.edu.cn/simple/">https://pypi.tuna.tsinghua.edu.cn/simple/</a> 清华大学</li>
+<li><a href="https://pypi.doubanio.com/simple/">https://pypi.doubanio.com/simple/</a> 豆瓣</li>
+<li><a href="https://mirrors.ustc.edu.cn/pypi/web/simple/">https://mirrors.ustc.edu.cn/pypi/web/simple/</a> 中国科学技术大学</li>
+</ul>
+<p>上面的源站都测试过，对我来说，首选阿里云，因为确实快</p>
+<h3 id="2-临时指定镜像源"><a href="#2-临时指定镜像源" class="headerlink" title="2 临时指定镜像源"></a>2 临时指定镜像源</h3><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">pip <span class="keyword">install</span> -i 镜像源地址 包名称</span><br></pre></td></tr></table></figure>
+
+<p>例如安装 <code>django</code>，选用阿里云镜像源，则</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">pip install -i https:<span class="regexp">//mi</span>rrors.aliyun.com<span class="regexp">/pypi/</span>simple/ django</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-全局设置镜像源"><a href="#3-全局设置镜像源" class="headerlink" title="3 全局设置镜像源"></a>3 全局设置镜像源</h3><p>我个人使用的是 mac，步骤：</p>
+<p>1 在用户主目录下 <code>~/.config</code> 中新建 <code>pip</code> 文件夹（也可以直接在用户主目录下建立 <code>.pip</code> 文件夹)</p>
+<p>2 在上一步新建的文件中新建 <code>pip.conf</code></p>
+<p>3 在 <code>pip.conf</code> 文件中添加以下配置</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="keyword">global</span>]</span><br><span class="line">timeout = <span class="number">60</span></span><br><span class="line">index-url = https://mirrors.aliyun.com/pypi/simple</span><br><span class="line"></span><br><span class="line">[install]</span><br><span class="line">trusted-host=mirrors.aliyun.com</span><br></pre></td></tr></table></figure>
+
+<p>可以阅览官方文档：<a href="https://pip.pypa.io/en/stable/user_guide/#config-file">https://pip.pypa.io/en/stable/user_guide/#config-file</a></p>
+<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">You can <span class="built_in">set</span> <span class="keyword">a</span> custom path location <span class="keyword">for</span> this config</span><br><span class="line"><span class="built_in">file</span> <span class="keyword">using</span> <span class="keyword">the</span> environment <span class="built_in">variable</span> PIP_CONFIG_FILE.</span><br></pre></td></tr></table></figure>
+
+<p>用户可以自定义配置文件路径，配置好环境变量 <code>PIP_CONFIG_FILE</code> 即可。</p>
+<p>后续再安装 <code>python</code> 包都会使用设置好的源，节省时间。</p>
+]]></content>
+      <categories>
+        <category>资源加速</category>
+        <category>后端</category>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>加速</tag>
+        <tag>镜像</tag>
       </tags>
   </entry>
   <entry>
