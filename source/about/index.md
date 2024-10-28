@@ -11,13 +11,11 @@ class SelfDescription:
     tages = [
         'mac 党笼罩的全栈工程师',
         'linux 系统深度中毒患者',
-        '主开发语言：Java | Python',
+        '主开发语言：Java | Go | Python',
         '次开发语言：C | Rust | Javascript'
     ]
     doing = [
-        'Spring 全家桶讨生活',
-        '使用 Taro 开发小程序',
-        '基于 DRF 实现接口自动化工具以及业务插件',
-        '用 C 做些小玩意',
+        '修身阳性',
+        '质疑 AI，理解 AI，重度使用 AI'
     ]
 ```

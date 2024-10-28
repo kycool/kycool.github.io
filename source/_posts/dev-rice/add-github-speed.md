@@ -13,13 +13,11 @@ date: 2020-03-18 10:50:20
 
 这段时间，github 的 clone 快搞死人了，速度慢的一逼，上网看了几种方法<!--more-->
 
-1. 改 hosts （亲测差异不大）
+1. 改 hosts（亲测差异不大）
 2. 先拉到 gitee，再从 gitee 克隆
 3. 走代理
 
 我使用了代理，第二种方法不适合我，为什么，一个是自己懒，另外一个就是安装某些软件，这些软件特么的自己写死了 clone 地址（一般都是不能改的），所以果断抛弃，直奔第三种方式
-
-<!--more-->
 
 ### 2 执行方法
 
@@ -49,7 +47,7 @@ git config --global core.gitproxy "git-proxy"
 git config --global socks.proxy 'socks5://127.0.0.1:1086'
 ```
 
-设置完后, 看下 git 的全局配置 `git config --global --list`
+设置完后，看下 git 的全局配置 `git config --global --list`
 
 ```python
 user.name=xxxx

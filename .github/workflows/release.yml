@@ -44,11 +44,6 @@ jobs:
           git config --global user.name "kycool"
           git config --global user.email "kycool@gmail.com"
 
-      # - name: Test SSH Connection
-      #   run: |
-      #     cat ~/.ssh/id_rsa
-      #     ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no git@github.com || exit 1
-
       - name: Install dependencies
         run: |
           npm i -g hexo-cli
@@ -56,5 +51,6 @@ jobs:
 
       - name: Deploy hexo
         run: |
+          ls -lah
           hexo clean
           hexo d -g
