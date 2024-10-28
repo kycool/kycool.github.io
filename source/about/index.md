@@ -15,7 +15,7 @@ class SelfDescription:
         '次开发语言：C | Rust | Javascript'
     ]
     doing = [
-        '修身阳性',
+        '修身养性',
         '质疑 AI，理解 AI，重度使用 AI'
     ]
 ```
