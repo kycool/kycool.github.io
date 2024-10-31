@@ -61,10 +61,10 @@ marked:
 
 highlight:
   enable: true
-  line_number: true
   auto_detect: true
+  line_number: true
   tab_replace: ""
-  wrap: true
+  wrap: false
   hljs: true
 
 prismjs:

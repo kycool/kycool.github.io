@@ -343,19 +343,18 @@ codeblock:
   # Code Highlight theme
   # All available themes: https://theme-next.js.org/highlight/
   theme:
-    light: github
-    dark: github
+    light: foundation
+    dark: foundation
   prism:
-    light: prism-twilight
-    dark: prism-twilight
+    light: prism-xonokai
+    dark: prism-xonokai
   # Add copy button on codeblock
   copy_button:
-    enable: true
+    enable: false
     # Available values: default | flat | mac
-    style: flat
-  # Fold code block
+    style:
   fold:
-    enable: true
+    enable: false
     height: 500
 
 back2top:
@@ -878,3 +877,6 @@ vendors:
 css: css
 js: js
 images: images
+
+page:
+  comments: true
