@@ -204,7 +204,7 @@ drwxr-xr-x 8 root root 4.0K Oct 30 06:07 .git
 -rw-r--r-- 1 root root 2.7M Oct 30 06:05 vocab.json
 ```
 
-### 3 推理 - 直接通过脚本
+### 3 推理 - 离线推理
 
 直接通过 python 脚本来调用模型，而不是通过 api 的方式进行调用
 
@@ -719,3 +719,9 @@ data: {"id":"chat-f434de356a7d4e42b5ac89ea4d8d9b91","object":"chat.completion.ch
 
 本地部署的这个大模型，还有些缺点，例如不能理解上下文。
 如果部署是在有 GPU 显卡的服务器上，部署更快捷，模型推理更快。
+
+### 5 参考资料
+
+- https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct/tree/main
+- https://qwen.readthedocs.io/zh-cn/latest/deployment/vllm.html
+- https://www.cnblogs.com/obullxl/p/18353447/NTopic2024081101
