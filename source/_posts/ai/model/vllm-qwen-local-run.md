@@ -28,8 +28,12 @@ Codename:	noble
 
 #### 1.2 conda 安装
 
+{% note info %}
+
 python 环境，使用的是 `Miniconda`
 安装直接参考官方文档即可：https://docs.anaconda.com/miniconda/#quick-command-line-install
+
+{% endnote %}
 
 ```python
 mkdir -p ~/miniconda3
@@ -137,7 +141,9 @@ conda activate ravllM
 
 因为 vllm 默认支持 GPU，所以需要安装 CPU 版本，则需要自行编译安装
 
-> 🔥 如果你有 GPU 显卡，建议直接使用 GPU 版本
+{% note success %}
+🔥 如果你有 GPU 显卡，建议直接使用 GPU 版本
+{% endnote %}
 
 ```shell
 pip install vllm
@@ -145,7 +151,9 @@ pip install vllm
 
 ---
 
-> 🔥 如果你没有 GPU 显卡，如果用 CPU 版本，则需要自行编译安装
+{% note success %}
+🔥 如果你没有 GPU 显卡，如果用 CPU 版本，则需要自行编译安装
+{% endnote %}
 
 ```shell
 # 安装 gcc 编译器
@@ -179,10 +187,13 @@ mkdir -p ~/modelspace && cd ~/modelspace
 git clone https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct Qwen2.5-1.5B-Instruct
 ```
 
-注意：
+{% note info %}
+**注意：**
 
 - 如果从 https://huggingface.co 下载较慢，可以从国内的 https://www.modelscope.cn 进行下载
 - 当然也可以通过 sdk 或者命令行的方式进行下载，可以自行参考官方文档
+
+{% endnote %}
 
 clone 完后，查看下大模型目录结构
 
@@ -345,7 +356,11 @@ vllm serve /root/modelspace/Qwen2.5-1.5B-Instruct
 
 ---
 
+{% note info %}
+
 **注意**：上面的命令中，重点关注下 `--disable-frontend-multiprocessing` 这个参数选项，如果不指定，客户端调用 api 的时候会报错。可能跟我使用的模型的参数大小有关系，如果是 0.5B，就不会报错
+
+{% endnote %}
 
 ---
 
@@ -386,8 +401,10 @@ clean up at shutdown
   warnings.warn('resource_tracker: There appear to be %d '
 ```
 
+{% note danger %}
 🆘 🆘 🆘
 **查阅了资料，目前还没有找出具体原因（网上的资料说什么的都有，都不能解决问题）**
+{% endnote %}
 
 🚀 正常启动服务后，运行如下：
 
