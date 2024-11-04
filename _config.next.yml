@@ -149,7 +149,7 @@ site_state: true
 social:
   GitHub: https://github.com/kycool || fab fa-github
   E-Mail: mailto:kycoolcool@gmail.com || fa fa-envelope
-  Twitter: https://twitter.com/Boykycool || fab fa-twitter
+  # Twitter: https://twitter.com/Boykycool || fab fa-twitter
 
 social_icons:
   enable: true
@@ -710,6 +710,10 @@ addtoany:
   buttons:
     - facebook
     - twitter
+    - linkedin
+    - reddit
+    - telegram
+    - wechat
 
 # ---------------------------------------------------------------
 # Statistics and Analytics

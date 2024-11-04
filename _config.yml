@@ -59,6 +59,7 @@ marked:
   prependRoot: true
   postAsset: true
 
+syntax_highlighter: highlight.js
 highlight:
   enable: true
   auto_detect: true
