@@ -420,10 +420,10 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">TYPE=Ethernet</span><br><span class="line">PROXY_METHOD=none</span><br><span class="line">BROWSER_ONLY=no</span><br><span class="line"><span class="comment"># 这里可以使用 static 或者 no</span></span><br><span class="line">BOOTPROTO=none</span><br><span class="line">DEFROUTE=yes</span><br><span class="line">IPV4_FAILURE_FATAL=no</span><br><span class="line">IPV6INIT=yes</span><br><span class="line">IPV6_AUTOCONF=yes</span><br><span class="line">IPV6_DEFROUTE=yes</span><br><span class="line">IPV6_FAILURE_FATAL=no</span><br><span class="line">IPV6_ADDR_GEN_MODE=stable-privacy</span><br><span class="line">NAME=ens192</span><br><span class="line">UUID=cd93f1df-d2d5-4c63-a64c-761e9ee23aae</span><br><span class="line">DEVICE=ens192</span><br><span class="line"><span class="comment"># 开机启用此配置</span></span><br><span class="line">ONBOOT=yes</span><br><span class="line"><span class="comment"># 静态 IP</span></span><br><span class="line">IPADDR=<span class="number">192.168</span><span class="number">.1</span><span class="number">.12</span></span><br><span class="line"><span class="comment"># 默认网关</span></span><br><span class="line">GATEWAY=<span class="number">192.168</span><span class="number">.1</span><span class="number">.1</span></span><br></pre></td></tr></table></figure>
 
 <h4 id="1-3-重启网络服务"><a href="#1-3-重启网络服务" class="headerlink" title="1.3 重启网络服务"></a>1.3 重启网络服务</h4><p>对于 <code>Centos7</code>:</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">systemctl restart network</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">systemctl restart network</span><br></pre></td></tr></table></figure>
 
 <p>对于 <code>Centos8</code>:</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">systemctl restart NetworkManager</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">systemctl restart NetworkManager</span><br></pre></td></tr></table></figure>
 
 <h4 id="1-4-查看地址"><a href="#1-4-查看地址" class="headerlink" title="1.4 查看地址"></a>1.4 查看地址</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[isproot@192 ~]$ ip addr</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 ::1/128 scope host</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: ens192: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    link/ether 00:0c:29:51:63:21 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 192.168.1.12/24 brd 192.168.1.255 scope global noprefixroute ens192</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 2408:8256:a80:313:6ba6:7ad0:edd0:defe/64 scope global noprefixroute dynamic</span><br><span class="line">       valid_lft 183241sec preferred_lft 96841sec</span><br><span class="line">    inet6 fe80::b6f3:1daa:4b7b:6994/64 scope link noprefixroute</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
 
@@ -447,6 +447,28 @@
 <h4 id="2-3-重启网络服务"><a href="#2-3-重启网络服务" class="headerlink" title="2.3 重启网络服务"></a>2.3 重启网络服务</h4><figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">service networking restart</span></span><br></pre></td></tr></table></figure>
 
 <h4 id="2-4-查看地址"><a href="#2-4-查看地址" class="headerlink" title="2.4 查看地址"></a>2.4 查看地址</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">root@debian:~# ip addr</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 ::1/128 scope host</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: ens192: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc mq state UP group default qlen 1000</span><br><span class="line">    link/ether 00:0c:29:0a:14:07 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 192.168.1.11/24 brd 192.168.1.255 scope global ens192</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 2408:8256:a81:c14f:20c:29ff:fe0a:1407/64 scope global dynamic mngtmpaddr</span><br><span class="line">       valid_lft 206755sec preferred_lft 120355sec</span><br><span class="line">    inet6 fe80::20c:29ff:fe0a:1407/64 scope link</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-rockyLinux-9-x-设置静态-IP"><a href="#3-rockyLinux-9-x-设置静态-IP" class="headerlink" title="3 rockyLinux 9.x 设置静态 IP"></a>3 rockyLinux 9.x 设置静态 IP</h3><p>按照常规的方法查看网络配置文件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# cd /etc/sysconfig/network-scripts/</span><br><span class="line"></span><br><span class="line">[root@localhost network-scripts]# ls</span><br><span class="line">readme-ifcfg-rh.txt</span><br><span class="line"></span><br><span class="line">[root@localhost network-scripts]# cat readme-ifcfg-rh.txt</span><br><span class="line">NetworkManager stores new network profiles in keyfile format in the</span><br><span class="line">/etc/NetworkManager/system-connections/ directory.</span><br><span class="line"></span><br><span class="line">Previously, NetworkManager stored network profiles in ifcfg format</span><br><span class="line">in this directory (/etc/sysconfig/network-scripts/). However, the ifcfg</span><br><span class="line">format is deprecated. By default, NetworkManager no longer creates</span><br><span class="line">new profiles in this format.</span><br><span class="line"></span><br><span class="line">Connection profiles in keyfile format have many benefits. For example,</span><br><span class="line">this format is INI file-based and can easily be parsed and generated.</span><br><span class="line"></span><br><span class="line">Each section in NetworkManager keyfiles corresponds to a NetworkManager</span><br><span class="line">setting name as described in the nm-settings(5) and nm-settings-keyfile(5)</span><br><span class="line">man pages. Each key-value-pair in a section is one of the properties</span><br><span class="line">listed in the settings specification of the man page.</span><br><span class="line"></span><br><span class="line">If you still use network profiles in ifcfg format, consider migrating</span><br><span class="line">them to keyfile format. To migrate all profiles at once, enter:</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">nmcli connection migrate</span></span><br><span class="line"></span><br><span class="line">This command migrates all profiles from ifcfg format to keyfile</span><br><span class="line">format and stores them in /etc/NetworkManager/system-connections/.</span><br><span class="line"></span><br><span class="line">Alternatively, to migrate only a specific profile, enter:</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">nmcli connection migrate &lt;profile_name|UUID|D-Bus_path&gt;</span></span><br><span class="line"></span><br><span class="line">For further details, see:</span><br><span class="line">* nm-settings-keyfile(5)</span><br><span class="line">* nmcli(1)</span><br></pre></td></tr></table></figure>
+
+<p>根据上面所述，可以看到，在 <code>RockyLinux</code> 中，网络配置文件已经不再使用 <code>ifcfg</code> 格式了，而是使用 <code>keyfile</code> 格式。存储的目录在 <code>/etc/NetworkManager/system-connections/</code> 目录下</p>
+<h4 id="3-1-找出需要设置静态-IP-的网络接口名称"><a href="#3-1-找出需要设置静态-IP-的网络接口名称" class="headerlink" title="3.1 找出需要设置静态 IP 的网络接口名称"></a>3.1 找出需要设置静态 IP 的网络接口名称</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost system-connections]# ip addr show</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 ::1/128 scope host</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: ens33: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UP group default qlen 1000</span><br><span class="line">    link/ether 00:0c:29:6a:50:7c brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    altname enp2s1</span><br><span class="line">    inet 192.168.1.26/24 brd 192.168.1.255 scope global dynamic noprefixroute ens33</span><br><span class="line">       valid_lft 6140sec preferred_lft 6140sec</span><br><span class="line">    inet6 fe80::20c:29ff:fe6a:507c/64 scope link noprefixroute</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-修改网络配置"><a href="#3-2-修改网络配置" class="headerlink" title="3.2 修改网络配置"></a>3.2 修改网络配置</h4><p>进入到 <code>/etc/NetworkManager/system-connections/</code> 目录下，找到需要设置静态 IP 的网络配置文件，通常是以 <code>.nmconnection</code> 为后缀的文件。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost system-connections]# ls</span><br><span class="line">ens33.nmconnection</span><br></pre></td></tr></table></figure>
+
+<p>然后修改此文件的 <code>[ipv4]</code> 部分，修改后如下</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[ipv4]</span><br><span class="line">method=manual</span><br><span class="line">address=<span class="number">192.168</span><span class="number">.1</span><span class="number">.130</span>/<span class="number">24</span>,<span class="number">192.168</span><span class="number">.1</span><span class="number">.1</span></span><br><span class="line">dns=<span class="number">202.96</span><span class="number">.128</span><span class="number">.143</span>;<span class="number">114.114</span><span class="number">.114</span><span class="number">.114</span>;</span><br><span class="line">may-fail=false</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>method=manual</code> 表示手动配置 IP 地址</li>
+<li><code>address</code> 是 IP 地址和子网掩码和网关</li>
+<li><code>dns</code> 是 DNS 服务器地址，多个 DNS 服务器地址之间用分号隔开</li>
+<li><code>may-fail=false</code> 表示如果 IP 地址配置失败，不允许网络连接</li>
+</ul>
+<h4 id="3-3-重启网络服务"><a href="#3-3-重启网络服务" class="headerlink" title="3.3 重启网络服务"></a>3.3 重启网络服务</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmcli c reload</span><br><span class="line">nmcli c up ens33</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-4-查看地址"><a href="#3-4-查看地址" class="headerlink" title="3.4 查看地址"></a>3.4 查看地址</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# ip addr</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 ::1/128 scope host</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: ens33: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UP group default qlen 1000</span><br><span class="line">    link/ether 00:0c:29:6a:50:7c brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    altname enp2s1</span><br><span class="line">    inet 192.168.1.130/24 brd 192.168.1.255 scope global noprefixroute ens33</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 fe80::20c:29ff:fe6a:507c/64 scope link noprefixroute</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
 
 <h2 id="二-小结"><a href="#二-小结" class="headerlink" title="二 小结"></a>二 小结</h2><p>从配置的过程来看，基本上都是配置文件的目录和配置项不同而已，其他基本上都差不多，毕竟原理都是一样的。</p>
 ]]></content>
@@ -576,76 +598,6 @@
       </categories>
       <tags>
         <tag>大模型</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mysql | 索引查询</title>
-    <url>/posts/8256/</url>
-    <content><![CDATA[<p>发现了一个非常好用的方法，就是使用索引查询<span id="more"></span>，</p>
-<blockquote>
-<p>mysql 版本：8.x</p>
-</blockquote>
-<h2 id="1-查询语法"><a href="#1-查询语法" class="headerlink" title="1 查询语法"></a>1 查询语法</h2><h3 id="1-1-语法解读"><a href="#1-1-语法解读" class="headerlink" title="1.1 语法解读"></a>1.1 语法解读</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> [EXTENDED] &#123;INDEX <span class="operator">|</span> INDEXES <span class="operator">|</span> KEYS&#125;</span><br><span class="line">    &#123;<span class="keyword">FROM</span> <span class="operator">|</span> <span class="keyword">IN</span>&#125; tbl_name</span><br><span class="line">    [&#123;<span class="keyword">FROM</span> <span class="operator">|</span> <span class="keyword">IN</span>&#125; db_name]</span><br><span class="line">    [<span class="keyword">WHERE</span> expr]</span><br></pre></td></tr></table></figure>
-
-<p><strong>语法解读</strong><br>这是 <code>SHOW INDEX</code> 命令的完整语法，下面我将逐个解释每个部分：</p>
-<ul>
-<li><code>SHOW</code>：这是开始执行命令的关键字。</li>
-<li><code>[EXTENDED]</code>：这是一个可选的关键字，如果使用了，它会显示隐藏的索引。</li>
-<li><code>&#123;INDEX | INDEXES | KEYS&#125;</code>：你可以选择其中任何一个关键字，它们都可以用来查看索引信息。这三个关键字在功能上是等价的。</li>
-<li><code>&#123;FROM | IN&#125;</code>：这两个关键字在这里的功能也是等价的，它们用来指定我们将从哪个表查看索引信息。</li>
-<li><code>tbl_name</code>：这是你想要查看索引信息的表的名称。</li>
-<li><code>[ &#123;FROM | IN&#125; db_name ]</code>：这是一个可选的部分，用来指定 <code>tbl_name</code> 所在的数据库。如果你已经使用 <code>USE db_name;</code> 选择了数据库，那么你可以省略这部分。</li>
-<li><code>[WHERE expr]</code>：这也是一个可选的部分，可以用来过滤结果。你可以提供一个条件表达式来限制返回的行。例如，你可以使用 <code>WHERE Key_name = &#39;PRIMARY&#39;</code> 来只显示主键的信息。</li>
-</ul>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> my_table <span class="keyword">FROM</span> my_database <span class="keyword">WHERE</span> Key_name <span class="operator">=</span> <span class="string">&#x27;PRIMARY&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
-<p>这个命令将显示数据库 <code>my_database`` 中表 </code>my_table&#96;&#96; 的主键信息。</p>
-<h3 id="1-2-提醒"><a href="#1-2-提醒" class="headerlink" title="1.2 提醒"></a>1.2 提醒</h3><p><strong>An alternative to tbl_name FROM db_name syntax is db_name.tbl_name</strong>. 下面这两条语句是等价的。</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> mytable <span class="keyword">FROM</span> mydb;</span><br><span class="line"><span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> mydb.mytable;</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-结果字段"><a href="#2-结果字段" class="headerlink" title="2 结果字段"></a>2 结果字段</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">show</span> extended index <span class="keyword">from</span> country <span class="keyword">in</span> mybatis <span class="keyword">where</span> Column_name <span class="operator">=</span> <span class="string">&#x27;id&#x27;</span> \G;</span><br><span class="line"><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span> <span class="number">1.</span> <span class="type">row</span> <span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span></span><br><span class="line">        <span class="keyword">Table</span>: country</span><br><span class="line">   Non_unique: <span class="number">0</span></span><br><span class="line">     Key_name: <span class="keyword">PRIMARY</span></span><br><span class="line"> Seq_in_index: <span class="number">1</span></span><br><span class="line">  Column_name: id</span><br><span class="line">    <span class="keyword">Collation</span>: A</span><br><span class="line">  <span class="keyword">Cardinality</span>: <span class="number">5</span></span><br><span class="line">     Sub_part: <span class="keyword">NULL</span></span><br><span class="line">       Packed: <span class="keyword">NULL</span></span><br><span class="line">         <span class="keyword">Null</span>:</span><br><span class="line">   Index_type: BTREE</span><br><span class="line">      Comment:</span><br><span class="line">Index_comment:</span><br><span class="line">      Visible: YES</span><br><span class="line">   Expression: <span class="keyword">NULL</span></span><br><span class="line"><span class="number">1</span> <span class="type">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
-
-<p>下面针对查询结果中每个字段给出详细的解释：</p>
-<ul>
-<li><p><strong>Table</strong><br>表名。</p>
-</li>
-<li><p><strong>Non_unique</strong><br>如果索引不能包含重复项，则为 <code>0</code>；如果可以，则为 <code>1</code>。也就是我们平时所说的唯一索引</p>
-</li>
-<li><p><strong>Key_name</strong><br>索引的名称，如果名字相同则表明是同一个索引，而并不是重复，名字相同的是联合索引。如果索引是主键索引，那么索引名称永远都是 <code>PRIMARY</code></p>
-</li>
-<li><p><strong>Seq_in_index</strong><br>索引中的列序号，对于多列索引，第一列为 <code>1</code>，第二列为 <code>2</code>，依此类推。</p>
-</li>
-<li><p><strong>Column_name</strong><br>索引的列名。</p>
-</li>
-<li><p><strong>Collation</strong><br>列在索引中的排序方式。有 <code>A（升序）</code>，<code>D（降序）</code>，<code>NULL（无排序）</code>。</p>
-</li>
-<li><p><strong>Cardinality</strong><br>索引中唯一值的数目的估计值。对于非唯一索引，该值是 <code>NULL</code>。要更新这个数字，请运行 <code> ANALYZE TABLE</code> 或（对于 <code>MyISAM</code> 表）<code>myisamchk -a</code>。</p>
-<p>我们知道某个字段的重复值越少越适合建索引，所以我们一般都是根据 <code>Cardinality</code> 来判断索引是否具有高选择性，如果这个值非常小，那就需要重新评估这个字段是否适合建立索引。<code>Cardinality</code> 越大，使用此索引的机会就越大。</p>
-</li>
-<li><p><strong>Sub_part</strong><br>前置索引的意思，如果列只是被部分地编入索引，则为被编入索引的字符数。对于完全编入索引的列，此值为 <code>NULL</code>。</p>
-</li>
-<li><p><strong>Packed</strong><br>MySQL 用来使索引更小的数据压缩方式。此值通常为 <code>NULL</code>。压缩一般包括压缩传输协议、压缩列解决方案和压缩表解决方案。</p>
-</li>
-<li><p><strong>Null</strong><br>如果列可能包含 <code>NULL</code> 值，则为 <code>YES</code>；否则，则为 <code>NO</code>。</p>
-</li>
-<li><p><strong>Index_type</strong><br>使用的索引方法（例如 <code>BTREE, FULLTEXT, HASH, RTREE</code>）。</p>
-</li>
-<li><p><strong>Comment</strong><br>索引列中未说明的有关索引的信息，例如，如果索引已禁用，则表示已禁用。</p>
-</li>
-<li><p><strong>Index_comment</strong><br>这个字段包含了在创建索引时指定的注释。例如，在执行 <code>CREATE INDEX</code> 或 <code>ALTER TABLE</code> 语句时，你可以使用 <code>COMMENT</code> 选项来添加注释。。</p>
-</li>
-<li><p><strong>Visible</strong><br>这个字段在 <code>MySQL 8.0.12</code> 及之后的版本中被引入。它表明索引是否是可见的。如果索引是可见的（<code>Visible</code> 的值为 <code>YES</code>），那么优化器可以选择使用这个索引来执行查<br>询。如果索引是不可见的（<code>Visible</code> 的值为 <code>NO</code>），那么优化器将不会使用这个索引来执行查询。</p>
-</li>
-<li><p><strong>Expression</strong><br>关于索引的一些注解信息。</p>
-</li>
-</ul>
-<p>请注意，如果你要查看的表在一个特定的数据库中，你可能需要先使用 <code>USE database_name;</code> 来选择那个数据库。</p>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>Mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -886,8 +838,8 @@
         <category>Python</category>
       </categories>
       <tags>
-        <tag>Mysql</tag>
         <tag>Django</tag>
+        <tag>Mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -1044,6 +996,76 @@
       <tags>
         <tag>加速</tag>
         <tag>镜像</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mysql | 索引查询</title>
+    <url>/posts/8256/</url>
+    <content><![CDATA[<p>发现了一个非常好用的方法，就是使用索引查询<span id="more"></span>，</p>
+<blockquote>
+<p>mysql 版本：8.x</p>
+</blockquote>
+<h2 id="1-查询语法"><a href="#1-查询语法" class="headerlink" title="1 查询语法"></a>1 查询语法</h2><h3 id="1-1-语法解读"><a href="#1-1-语法解读" class="headerlink" title="1.1 语法解读"></a>1.1 语法解读</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> [EXTENDED] &#123;INDEX <span class="operator">|</span> INDEXES <span class="operator">|</span> KEYS&#125;</span><br><span class="line">    &#123;<span class="keyword">FROM</span> <span class="operator">|</span> <span class="keyword">IN</span>&#125; tbl_name</span><br><span class="line">    [&#123;<span class="keyword">FROM</span> <span class="operator">|</span> <span class="keyword">IN</span>&#125; db_name]</span><br><span class="line">    [<span class="keyword">WHERE</span> expr]</span><br></pre></td></tr></table></figure>
+
+<p><strong>语法解读</strong><br>这是 <code>SHOW INDEX</code> 命令的完整语法，下面我将逐个解释每个部分：</p>
+<ul>
+<li><code>SHOW</code>：这是开始执行命令的关键字。</li>
+<li><code>[EXTENDED]</code>：这是一个可选的关键字，如果使用了，它会显示隐藏的索引。</li>
+<li><code>&#123;INDEX | INDEXES | KEYS&#125;</code>：你可以选择其中任何一个关键字，它们都可以用来查看索引信息。这三个关键字在功能上是等价的。</li>
+<li><code>&#123;FROM | IN&#125;</code>：这两个关键字在这里的功能也是等价的，它们用来指定我们将从哪个表查看索引信息。</li>
+<li><code>tbl_name</code>：这是你想要查看索引信息的表的名称。</li>
+<li><code>[ &#123;FROM | IN&#125; db_name ]</code>：这是一个可选的部分，用来指定 <code>tbl_name</code> 所在的数据库。如果你已经使用 <code>USE db_name;</code> 选择了数据库，那么你可以省略这部分。</li>
+<li><code>[WHERE expr]</code>：这也是一个可选的部分，可以用来过滤结果。你可以提供一个条件表达式来限制返回的行。例如，你可以使用 <code>WHERE Key_name = &#39;PRIMARY&#39;</code> 来只显示主键的信息。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> my_table <span class="keyword">FROM</span> my_database <span class="keyword">WHERE</span> Key_name <span class="operator">=</span> <span class="string">&#x27;PRIMARY&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这个命令将显示数据库 <code>my_database`` 中表 </code>my_table&#96;&#96; 的主键信息。</p>
+<h3 id="1-2-提醒"><a href="#1-2-提醒" class="headerlink" title="1.2 提醒"></a>1.2 提醒</h3><p><strong>An alternative to tbl_name FROM db_name syntax is db_name.tbl_name</strong>. 下面这两条语句是等价的。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> mytable <span class="keyword">FROM</span> mydb;</span><br><span class="line"><span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> mydb.mytable;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-结果字段"><a href="#2-结果字段" class="headerlink" title="2 结果字段"></a>2 结果字段</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">show</span> extended index <span class="keyword">from</span> country <span class="keyword">in</span> mybatis <span class="keyword">where</span> Column_name <span class="operator">=</span> <span class="string">&#x27;id&#x27;</span> \G;</span><br><span class="line"><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span> <span class="number">1.</span> <span class="type">row</span> <span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span></span><br><span class="line">        <span class="keyword">Table</span>: country</span><br><span class="line">   Non_unique: <span class="number">0</span></span><br><span class="line">     Key_name: <span class="keyword">PRIMARY</span></span><br><span class="line"> Seq_in_index: <span class="number">1</span></span><br><span class="line">  Column_name: id</span><br><span class="line">    <span class="keyword">Collation</span>: A</span><br><span class="line">  <span class="keyword">Cardinality</span>: <span class="number">5</span></span><br><span class="line">     Sub_part: <span class="keyword">NULL</span></span><br><span class="line">       Packed: <span class="keyword">NULL</span></span><br><span class="line">         <span class="keyword">Null</span>:</span><br><span class="line">   Index_type: BTREE</span><br><span class="line">      Comment:</span><br><span class="line">Index_comment:</span><br><span class="line">      Visible: YES</span><br><span class="line">   Expression: <span class="keyword">NULL</span></span><br><span class="line"><span class="number">1</span> <span class="type">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+
+<p>下面针对查询结果中每个字段给出详细的解释：</p>
+<ul>
+<li><p><strong>Table</strong><br>表名。</p>
+</li>
+<li><p><strong>Non_unique</strong><br>如果索引不能包含重复项，则为 <code>0</code>；如果可以，则为 <code>1</code>。也就是我们平时所说的唯一索引</p>
+</li>
+<li><p><strong>Key_name</strong><br>索引的名称，如果名字相同则表明是同一个索引，而并不是重复，名字相同的是联合索引。如果索引是主键索引，那么索引名称永远都是 <code>PRIMARY</code></p>
+</li>
+<li><p><strong>Seq_in_index</strong><br>索引中的列序号，对于多列索引，第一列为 <code>1</code>，第二列为 <code>2</code>，依此类推。</p>
+</li>
+<li><p><strong>Column_name</strong><br>索引的列名。</p>
+</li>
+<li><p><strong>Collation</strong><br>列在索引中的排序方式。有 <code>A（升序）</code>，<code>D（降序）</code>，<code>NULL（无排序）</code>。</p>
+</li>
+<li><p><strong>Cardinality</strong><br>索引中唯一值的数目的估计值。对于非唯一索引，该值是 <code>NULL</code>。要更新这个数字，请运行 <code> ANALYZE TABLE</code> 或（对于 <code>MyISAM</code> 表）<code>myisamchk -a</code>。</p>
+<p>我们知道某个字段的重复值越少越适合建索引，所以我们一般都是根据 <code>Cardinality</code> 来判断索引是否具有高选择性，如果这个值非常小，那就需要重新评估这个字段是否适合建立索引。<code>Cardinality</code> 越大，使用此索引的机会就越大。</p>
+</li>
+<li><p><strong>Sub_part</strong><br>前置索引的意思，如果列只是被部分地编入索引，则为被编入索引的字符数。对于完全编入索引的列，此值为 <code>NULL</code>。</p>
+</li>
+<li><p><strong>Packed</strong><br>MySQL 用来使索引更小的数据压缩方式。此值通常为 <code>NULL</code>。压缩一般包括压缩传输协议、压缩列解决方案和压缩表解决方案。</p>
+</li>
+<li><p><strong>Null</strong><br>如果列可能包含 <code>NULL</code> 值，则为 <code>YES</code>；否则，则为 <code>NO</code>。</p>
+</li>
+<li><p><strong>Index_type</strong><br>使用的索引方法（例如 <code>BTREE, FULLTEXT, HASH, RTREE</code>）。</p>
+</li>
+<li><p><strong>Comment</strong><br>索引列中未说明的有关索引的信息，例如，如果索引已禁用，则表示已禁用。</p>
+</li>
+<li><p><strong>Index_comment</strong><br>这个字段包含了在创建索引时指定的注释。例如，在执行 <code>CREATE INDEX</code> 或 <code>ALTER TABLE</code> 语句时，你可以使用 <code>COMMENT</code> 选项来添加注释。。</p>
+</li>
+<li><p><strong>Visible</strong><br>这个字段在 <code>MySQL 8.0.12</code> 及之后的版本中被引入。它表明索引是否是可见的。如果索引是可见的（<code>Visible</code> 的值为 <code>YES</code>），那么优化器可以选择使用这个索引来执行查<br>询。如果索引是不可见的（<code>Visible</code> 的值为 <code>NO</code>），那么优化器将不会使用这个索引来执行查询。</p>
+</li>
+<li><p><strong>Expression</strong><br>关于索引的一些注解信息。</p>
+</li>
+</ul>
+<p>请注意，如果你要查看的表在一个特定的数据库中，你可能需要先使用 <code>USE database_name;</code> 来选择那个数据库。</p>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>Mysql</tag>
       </tags>
   </entry>
 </search>
