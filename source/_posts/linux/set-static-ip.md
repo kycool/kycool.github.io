@@ -77,13 +77,13 @@ GATEWAY=192.168.1.1
 
 对于 `Centos7`:
 
-```
+```shell
 systemctl restart network
 ```
 
 对于 `Centos8`:
 
-```
+```shell
 systemctl restart NetworkManager
 ```
 
@@ -209,6 +209,121 @@ root@debian:~# ip addr
     inet6 2408:8256:a81:c14f:20c:29ff:fe0a:1407/64 scope global dynamic mngtmpaddr
        valid_lft 206755sec preferred_lft 120355sec
     inet6 fe80::20c:29ff:fe0a:1407/64 scope link
+       valid_lft forever preferred_lft forever
+```
+
+### 3 rockyLinux 9.x 设置静态 IP
+
+按照常规的方法查看网络配置文件
+
+```shell
+[root@localhost ~]# cd /etc/sysconfig/network-scripts/
+
+[root@localhost network-scripts]# ls
+readme-ifcfg-rh.txt
+
+[root@localhost network-scripts]# cat readme-ifcfg-rh.txt
+NetworkManager stores new network profiles in keyfile format in the
+/etc/NetworkManager/system-connections/ directory.
+
+Previously, NetworkManager stored network profiles in ifcfg format
+in this directory (/etc/sysconfig/network-scripts/). However, the ifcfg
+format is deprecated. By default, NetworkManager no longer creates
+new profiles in this format.
+
+Connection profiles in keyfile format have many benefits. For example,
+this format is INI file-based and can easily be parsed and generated.
+
+Each section in NetworkManager keyfiles corresponds to a NetworkManager
+setting name as described in the nm-settings(5) and nm-settings-keyfile(5)
+man pages. Each key-value-pair in a section is one of the properties
+listed in the settings specification of the man page.
+
+If you still use network profiles in ifcfg format, consider migrating
+them to keyfile format. To migrate all profiles at once, enter:
+
+# nmcli connection migrate
+
+This command migrates all profiles from ifcfg format to keyfile
+format and stores them in /etc/NetworkManager/system-connections/.
+
+Alternatively, to migrate only a specific profile, enter:
+
+# nmcli connection migrate <profile_name|UUID|D-Bus_path>
+
+For further details, see:
+* nm-settings-keyfile(5)
+* nmcli(1)
+```
+
+根据上面所述，可以看到，在 `RockyLinux` 中，网络配置文件已经不再使用 `ifcfg` 格式了，而是使用 `keyfile` 格式。存储的目录在 `/etc/NetworkManager/system-connections/` 目录下
+
+#### 3.1 找出需要设置静态 IP 的网络接口名称
+
+```shell
+[root@localhost system-connections]# ip addr show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 00:0c:29:6a:50:7c brd ff:ff:ff:ff:ff:ff
+    altname enp2s1
+    inet 192.168.1.26/24 brd 192.168.1.255 scope global dynamic noprefixroute ens33
+       valid_lft 6140sec preferred_lft 6140sec
+    inet6 fe80::20c:29ff:fe6a:507c/64 scope link noprefixroute
+       valid_lft forever preferred_lft forever
+```
+
+#### 3.2 修改网络配置
+
+进入到 `/etc/NetworkManager/system-connections/` 目录下，找到需要设置静态 IP 的网络配置文件，通常是以 `.nmconnection` 为后缀的文件。
+
+```shell
+[root@localhost system-connections]# ls
+ens33.nmconnection
+```
+
+然后修改此文件的 `[ipv4]` 部分，修改后如下
+
+```python
+[ipv4]
+method=manual
+address=192.168.1.130/24,192.168.1.1
+dns=202.96.128.143;114.114.114.114;
+may-fail=false
+```
+
+- `method=manual` 表示手动配置 IP 地址
+- `address` 是 IP 地址和子网掩码和网关
+- `dns` 是 DNS 服务器地址，多个 DNS 服务器地址之间用分号隔开
+- `may-fail=false` 表示如果 IP 地址配置失败，不允许网络连接
+
+#### 3.3 重启网络服务
+
+```shell
+nmcli c reload
+nmcli c up ens33
+```
+
+#### 3.4 查看地址
+
+```shell
+[root@localhost ~]# ip addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 00:0c:29:6a:50:7c brd ff:ff:ff:ff:ff:ff
+    altname enp2s1
+    inet 192.168.1.130/24 brd 192.168.1.255 scope global noprefixroute ens33
+       valid_lft forever preferred_lft forever
+    inet6 fe80::20c:29ff:fe6a:507c/64 scope link noprefixroute
        valid_lft forever preferred_lft forever
 ```
 
